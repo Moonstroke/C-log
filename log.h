@@ -19,7 +19,8 @@
 
 
 /**
- * \brief Defines the level of priority of a logging message.
+ * \brief Defines the level of priority of a logging message, or an alias to
+ * set the log filter.
  *
  * The message is to be filtered out from logs if its priority level is
  * inferior to the one set in log_setfilter().
