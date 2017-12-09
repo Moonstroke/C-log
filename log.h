@@ -1,3 +1,16 @@
+/**
+ * \file log.h
+ * \author joH1
+ *
+ * This file contains the definition of a simple logging system.
+ *
+ * Each call to a logging function will output its message -- given as a
+ * format string and parameters.
+ *
+ * A message is provided with a priority level, and can be filtered out, by
+ * specifiying a filter level.
+ */
+
 #ifndef LOG_H
 #define LOG_H
 
@@ -6,26 +19,25 @@
 
 
 /**
- * Defines the level of priority of a log message.
- * The message can be filtered out from logs if its priority level is
- * inferior to the one set in log_setfilter().
- * It will also be preceded in logs with the name of its level
- * and two separating dashes, e.g.:
+ * \brief Defines the level of priority of a logging message.
  *
- *     INFO -- info message content
+ * The message is to be filtered out from logs if its priority level is
+ * inferior to the one set in log_setfilter().
+ * It will also be preceded in logs by a header, consisting of the name of the
+ * level and two separating dashes, e.g.:
+ * \verbatim INFO -- info message content \endverbatim
  */
 typedef enum {
-	LOG_DEBUG = 0,
-	LOG_VERBOSE,
-	LOG_INFO,
-	LOG_WARNING,
-	LOG_ERROR,
+	LOG_DEBUG = 0, /**< A message used while developing, to help the programmer */
+	LOG_VERBOSE,   /**< A detailled information message */
+	LOG_INFO,      /**< An information message */
+	LOG_WARNING,   /**< Denotes a malfunction in the system */
+	LOG_ERROR,     /**< Denotes a severe unexpected behavior which can lead to system failure */
 
-	/* those should not be used with log() and only refer to
-	 * minimum and maximum filtering levels
-	 */
-	LOG_ALL = LOG_DEBUG,
-	LOG_NONE = LOG_ERROR
+	/* Those should not be used with log() as they only refer to minimum and
+	maximum filtering levels. */
+	LOGF_ALL = LOG_DEBUG,  /**< The maximal allowance level in filter */
+	LOGF_NONE = LOG_ERROR  /**< The most quiet level (only error messages are output) */
 } LogLevel;
 
 
@@ -61,7 +73,7 @@ LogLevel log_getfilter(void);
 /**
  * \brief Gets the name of the filter level.
  *
- * \return The name of the filtering level, in uppercase
+ * \return The name of the filtering level, in uppercase, e.g. \c "DEBUG"
  *
  * \sa log_getfilter
  */
@@ -94,7 +106,7 @@ const char *log_gettimefmt(void);
  *
  * \param[in] level The level of the message
  * \param[in] fmt   The string format for the message 
- * \param[in] ...   The arguments to format
+ * \param[in] args   The arguments to format, as a \a va_list
  *
  * \sa mlog
  */
@@ -105,10 +117,11 @@ void vmlog(LogLevel level, const char *fmt, va_list args);
  *
  * Uses same format than printf() et al.
  *
- * \note If fmt starts with a '\n', a new line will be output just before that.
+ * \note If fmt starts with a \c '\\n' character, a new line will be output just
+ *       before the message.
  *
  * \param[in] level The level of the message
- * \param[in] fmt   The string format for the message 
+ * \param[in] fmt   The string format for the message
  * \param[in] ...   The arguments to format
  *
  * \sa debug
@@ -129,7 +142,7 @@ inline void mlog(LogLevel level, const char *fmt, ...) {
 /**
  * \brief Logs a debugging message.
  *
- * \param[in] fmt The string format for the message 
+ * \param[in] fmt The string format for the message
  * \param[in] ... The arguments to format
  *
  * \sa mlog
@@ -144,6 +157,12 @@ inline void debug(const char *fmt, ...) {
 
 /**
  * \brief Logs a detailled information message.
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
  */
 inline void verbose(const char *fmt, ...) {
 	va_list args;
@@ -154,6 +173,12 @@ inline void verbose(const char *fmt, ...) {
 
 /**
  * \brief Logs a basic information message.
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
  */
 inline void info(const char *fmt, ...) {
 	va_list args;
@@ -164,6 +189,12 @@ inline void info(const char *fmt, ...) {
 
 /**
  * \brief Logs a warning message.
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
  */
 inline void warning(const char *fmt, ...) {
 	va_list args;
@@ -174,7 +205,14 @@ inline void warning(const char *fmt, ...) {
 
 /**
  * \brief Logs an error message.
- * Use mainly before a call to exit()
+ *
+ * \note Use mainly before a call to exit()
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
  */
 inline void error(const char *fmt, ...) {
 	va_list args;
