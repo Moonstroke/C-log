@@ -4,6 +4,9 @@
  *
  * This file contains the definition of a simple logging system.
  *
+ * Messages will be ouput on *stderr* by default, however the log file can be
+ * easily overwritten.
+ *
  * Each call to a logging function will output its message -- given as a
  * format string and parameters.
  *
