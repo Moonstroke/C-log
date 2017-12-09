@@ -6,7 +6,7 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "C / log"
 PROJECT_NUMBER         = 0.1
-PROJECT_BRIEF          = " A simple logging system in C"
+PROJECT_BRIEF          = "A simple logging system in C"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = "doc"
 CREATE_SUBDIRS         = NO
