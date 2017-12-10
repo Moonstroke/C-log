@@ -35,13 +35,14 @@ typedef enum {
 	LOG_DEBUG = 0, /**< A message used while developing, to help the programmer */
 	LOG_VERBOSE,   /**< A detailled information message */
 	LOG_INFO,      /**< An information message */
-	LOG_WARNING,   /**< Denotes a malfunction in the system */
+	LOG_WARNING,   /**< Indicates a malfunction in the system */
 	LOG_ERROR,     /**< Denotes a severe unexpected behavior which can lead to system failure */
+	LOG_FATAL,     /**< Marks a non-recoverable error happened, and the system will exit immediately */
 
-	/* Those should not be used with log() as they only refer to minimum and
-	maximum filtering levels. */
+	/* Those should not be used with log() as they are only aliases for the
+	minimum and maximum filtering levels. */
 	LOGF_ALL = LOG_DEBUG,  /**< The maximal allowance level in filter */
-	LOGF_NONE = LOG_ERROR  /**< The most quiet level (only error messages are output) */
+	LOGF_NONE = LOG_FATAL  /**< The most quiet level (only crash messages are output) */
 } LogLevel;
 
 
@@ -210,8 +211,6 @@ inline void warning(const char *fmt, ...) {
 /**
  * \brief Logs an error message.
  *
- * \note Use mainly before a call to exit()
- *
  * \param[in] fmt The string format for the message
  * \param[in] ... The arguments to format
  *
@@ -225,5 +224,22 @@ inline void error(const char *fmt, ...) {
 	va_end(args);
 }
 
+/**
+ * \brief Logs a fatal error message.
+ *
+ * \note Use before a call to \a exit(), or \c return from the \a main
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
+ */
+inline void fatal(const char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	vmlog(LOG_FATAL, fmt, args);
+	va_end(args);
+}
 
 #endif /* LOG_H */

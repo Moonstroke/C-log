@@ -18,7 +18,8 @@ static const char* headers[] = {
 		[LOG_VERBOSE] = "VERBOSE",
 		[LOG_INFO] = "INFO",
 		[LOG_WARNING] = "WARNING",
-		[LOG_ERROR] = "ERROR"
+		[LOG_ERROR] = "ERROR",
+		[LOG_FATAL] = "FATAL"
 };
 
 
