@@ -80,3 +80,4 @@ extern void verbose(const char *fmt, ...);
 extern void info(const char *fmt, ...);
 extern void warning(const char *fmt, ...);
 extern void error(const char *fmt, ...);
+extern void fatal(const char *fmt, ...);
