@@ -11,7 +11,7 @@ static const char *header = NULL;
 
 static const char *timefmt = " %c";
 
-static LogLevel logfilter = LOG_ALL;
+static LogLevel logfilter = LOGF_ALL;
 
 static const char* headers[] = {
 		[LOG_DEBUG] = "DEBUG",
