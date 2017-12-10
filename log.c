@@ -48,7 +48,7 @@ void log_settimefmt(const char *const fmt) { timefmt = fmt; }
 const char *log_gettimefmt(void) { return timefmt; }
 
 
-static void printheader(FILE *const out) {
+static inline void printheader(FILE *const out) {
 	time_t t = time(NULL);
 	char date[32];
 	strftime(date, 32, timefmt, localtime(&t));
