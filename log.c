@@ -61,13 +61,13 @@ void vmlog(const LogLevel lvl, const char *const fmt, va_list a) {
 	if(logfile == NULL)
 		logfile = stderr;
 	if(logfilter <= lvl) {
+		va_list args;
 		if(*fmt == '\n')
 			fputs("\n", logfile);
 		if(header) {
 			printheader(logfile);
 		}
 		fprintf(logfile, "%s -- ", headers[lvl]);
-		va_list args;
 		va_copy(args, a);
 		vfprintf(logfile, fmt + (*fmt == '\n'), args);
 		va_end(args);
