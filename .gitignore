@@ -1,5 +1,13 @@
+# Output executables
 a.out
+test
+
+# Object files
 *.o
 lib*.a
 
+# Documentation directory
+doc/
+
+# Other
 test.log
