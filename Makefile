@@ -39,7 +39,7 @@ all: $(OBJ_FILES) ar
 %.o: %.c
 	$(CC) -c $< -o$@ $(CFLAGS)
 
-ar:
+ar: $(OBJ_FILES)
 	$(AR) $(AR_FLAGS) $(AR_FILE) $(OBJ_FILES)
 
 clean:
@@ -54,6 +54,6 @@ doc:
 cleandoc:
 	rm -rf $(DOC_DIR)
 
-test:
+test: ar
 	$(CC) $(TEST_FILES) -o$(TEST_X) -l$(LIB)
-	$(TEST_X)
+	./$(TEST_X)
