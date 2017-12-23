@@ -4,7 +4,7 @@
  *
  * This file contains the definition of a simple logging system.
  *
- * Messages will be ouput on *stderr* by default, however the log file can be
+ * Messages will be ouput on \e stderr by default, however the log file can be
  * easily overwritten.
  *
  * Each call to a logging function will output its message -- given as a
@@ -12,6 +12,21 @@
  *
  * A message is provided with a priority level, and can be filtered out, by
  * specifiying a filter level.
+ *
+ * A message containing only <b>blank characters</b>, \e i.e.:
+ * - \c '\\t', <i>Horizontal Tabulation</i> (Tab),
+ * - \c '\\n', <i>Line Feed</i> (\c Enter key on *nix systems)
+ * - \c '\\v', <i>Vertical tabulation</i> (not much encountered these days)
+ * - \c '\\f', <i>Form Feed</i> (not much used either)
+ * - \c '\\r', <i>Carriage Return</i> (the cursor returns to the beginning of
+ *   the line), and
+ * - \c ' ' <i>blank space</i>
+ *
+ * will be output without header line or level display, this functionality
+ * allows to clarify the output and prioritize the display.
+ *
+ * Likewise, a message whose first character is a line feed (\c '\\n') will be
+ * output (header line and level included) \e after a new blank line.
  */
 
 #ifndef LOG_H
@@ -32,17 +47,27 @@
  * \verbatim INFO -- info message content \endverbatim
  */
 typedef enum {
-	LOG_DEBUG = 0, /**< A message used while developing, to help the programmer */
-	LOG_VERBOSE,   /**< A detailled information message */
-	LOG_INFO,      /**< An information message */
-	LOG_WARNING,   /**< Indicates a malfunction in the system */
-	LOG_ERROR,     /**< Denotes a severe unexpected behavior which can lead to system failure */
-	LOG_FATAL,     /**< Marks a non-recoverable error happened, and the system will exit immediately */
+	LOG_DEBUG = 0,
+	/**< A message used while developing, to help the programmer */
+	LOG_VERBOSE,
+	/**< A detailled information message */
+	LOG_INFO,
+	/**< An information message */
+	LOG_WARNING,
+	/**< Indicates a malfunction in the system */
+	LOG_ERROR,
+	/**< Denotes a severe unexpected behavior which can lead to system
+	     failure */
+	LOG_FATAL,
+	/**< Marks a non-recoverable error happened, and the system will exit
+	     immediately */
 
 	/* Those should not be used with log() as they are only aliases for the
 	minimum and maximum filtering levels. */
-	LOGF_ALL = LOG_DEBUG,  /**< The maximal allowance level in filter */
-	LOGF_NONE = LOG_FATAL  /**< The most quiet level (only crash messages are output) */
+	LOGF_ALL = LOG_DEBUG,
+	/**< The maximal allowance level in filter */
+	LOGF_NONE = LOG_FATAL
+	/**< The most quiet level (only crash messages are output) */
 } LogLevel;
 
 
