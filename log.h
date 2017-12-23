@@ -65,9 +65,10 @@ typedef enum {
 	/* Those should not be used with log() as they are only aliases for the
 	minimum and maximum filtering levels. */
 	LOGF_ALL = LOG_DEBUG,
-	/**< The maximal allowance level in filter */
+	/**< The maximal allowance level in filter (alias to \a LOG_DEBUG) */
 	LOGF_NONE = LOG_FATAL
-	/**< The most quiet level (only crash messages are output) */
+	/**< The most quiet level (only crash messages are output), alias to
+	     \a LOG_FATAL */
 } LogLevel;
 
 
