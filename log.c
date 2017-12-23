@@ -11,7 +11,7 @@ static FILE *logfile = NULL; // cannot initialize to stderr :'( gcc says
 
 static const char *header = NULL;
 
-static const char *timefmt = " %c";
+static const char *timefmt = "%c";
 
 static LogLevel logfilter = LOGF_ALL;
 
@@ -53,8 +53,8 @@ const char *log_gettimefmt(void) { return timefmt; }
 
 static inline void printheader(FILE *const out) {
 	time_t t = time(NULL);
-	char date[32];
-	strftime(date, 32, timefmt, localtime(&t));
+	char date[32] = {[0] = ' ', 0};
+	strftime(date + 1, 30, timefmt, localtime(&t));
 	fprintf(out, "%s%s\n", header, date);
 }
 
