@@ -21,6 +21,7 @@ int main(void) {
 	const char *const tfm = "%d/%m/%Y";
 
 	const char *const msg = "Test message log";
+	const char *const msb = "\t\n\v\f\r ";
 
 	if(test_log_file == NULL) { // just in case
 		fprintf(stderr, "Unable to create file \"%s\"\n", fname);
@@ -63,6 +64,8 @@ int main(void) {
 	testlog("test debug(\"%s\")\n", msg);
 	debug(msg);
 	// TODO
+
+	testlog("test blank message\n");
 
 	testlog("end tests\n");
 

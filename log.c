@@ -1,5 +1,7 @@
 #include "log.h"
 
+#include <ctype.h>
+#include <stdbool.h>
 #include <string.h>
 #include <time.h>
 
@@ -56,11 +58,17 @@ static inline void printheader(FILE *const out) {
 	fprintf(out, "%s%s\n", header, date);
 }
 
+static bool msgblank(const char *const msg) {
+	return *msg == '\0' || (isspace(*msg) && msgblank(msg + 1));
+}
+
 void vmlog(const LogLevel lvl, const char *const fmt, va_list a) {
 	// initialize logfile if it has not been already
 	if(logfile == NULL)
 		logfile = stderr;
-	if(logfilter <= lvl) {
+	if(msgblank(fmt))
+		fputs(fmt, logfile);
+	else if(logfilter <= lvl) {
 		va_list args;
 		if(*fmt == '\n')
 			fputs("\n", logfile);
