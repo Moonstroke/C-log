@@ -1,5 +1,5 @@
 DEBUG := n
-OPT_L := s
+OPT_L := 2
 
 LIB := log
 
