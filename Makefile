@@ -61,5 +61,5 @@ test: $(AR_FILE)
 	./$(TEST_X)
 
 install: all
-	cp --update --target-directory=$(PREFIX_DIR)/include log.h
-	cp --update --target-directory=$(PREFIX_DIR)/lib liblog.a
+	cp --update --target-directory=$(INST_DIR)/include log.h
+	cp --update --target-directory=$(INST_DIR)/lib $(AR_FILE)
