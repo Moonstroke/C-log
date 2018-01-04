@@ -4,7 +4,7 @@ OPT_L := 2
 LIB := log
 
 CC := gcc
-CFLAGS := -finline-functions -pedantic -Wall -Wextra -Wpadded -Wdeclaration-after-statement
+CFLAGS := -std=c11 -pedantic -Wall -Wextra -Wpadded
 ifeq ($(DEBUG), y)
 	CFLAGS += -g
 endif
