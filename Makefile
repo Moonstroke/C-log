@@ -47,13 +47,13 @@ $(AR_FILE): $(OBJ_FILES)
 clean:
 	rm -rf $(OBJ_FILES) $(TEST_X) $(TEST_LOG)
 
-distclean: clean cleandoc
+distclean: clean docclean
 	rm -rf $(AR_FILE)
 
 doc:
 	$(DOC_PRG) $(DOC_CFG)
 
-cleandoc:
+docclean:
 	rm -rf $(DOC_DIR)
 
 test: $(AR_FILE)
