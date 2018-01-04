@@ -23,7 +23,7 @@ AR := ar
 AR_FLAGS := rcs
 AR_FILE := lib$(LIB).a
 
-TEST_X := test
+TEST_X := test_log
 TEST_LOG := test.log
 
 DOC_PRG := doxygen
