@@ -30,8 +30,10 @@ DOC_PRG := doxygen
 DOC_CFG := Doxyfile
 DOC_DIR := doc
 
+INST_DIR := /usr/local
 
-.PHONY: all clean distclean doc cleandoc test
+
+.PHONY: all clean distclean doc cleandoc test install
 
 
 all: $(OBJ_FILES) ar
@@ -57,3 +59,7 @@ cleandoc:
 test: ar
 	$(CC) $(TEST_FILES) -o$(TEST_X) -l$(LIB)
 	./$(TEST_X)
+
+install: all
+	cp --update --target-directory=$(PREFIX_DIR)/include log.h
+	cp --update --target-directory=$(PREFIX_DIR)/lib liblog.a
