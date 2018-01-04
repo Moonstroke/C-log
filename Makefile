@@ -36,12 +36,12 @@ INST_DIR := /usr/local
 .PHONY: all clean distclean doc cleandoc test install
 
 
-all: $(OBJ_FILES) ar
+all: $(OBJ_FILES) $(AR_FILE)
 
 %.o: %.c
 	$(CC) -c $< -o$@ $(CFLAGS)
 
-ar: $(OBJ_FILES)
+$(AR_FILE): $(OBJ_FILES)
 	$(AR) $(AR_FLAGS) $(AR_FILE) $(OBJ_FILES)
 
 clean:
@@ -56,7 +56,7 @@ doc:
 cleandoc:
 	rm -rf $(DOC_DIR)
 
-test: ar
+test: $(AR_FILE)
 	$(CC) $(TEST_FILES) -o$(TEST_X) -l$(LIB)
 	./$(TEST_X)
 
