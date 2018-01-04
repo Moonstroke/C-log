@@ -63,3 +63,7 @@ test: $(AR_FILE)
 install: all
 	cp --update --target-directory=$(INST_DIR)/include log.h
 	cp --update --target-directory=$(INST_DIR)/lib $(AR_FILE)
+
+uninstall:
+	rm -f $(INST_DIR)/include/log.h
+	rm -f $(INST_DIR)/lib/$(AR_FILE)
