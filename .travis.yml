@@ -1,0 +1,10 @@
+language: c
+compiler: gcc
+
+# We need to be root to install the dependencies
+sudo: true
+
+
+script:
+ - make
+ - make test
