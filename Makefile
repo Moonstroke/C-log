@@ -12,8 +12,8 @@ ifneq ($(OPT_L), n)
 	CFLAGS += -O$(OPT_L)
 endif
 
-LDLIBS :=
-LDFLAGS :=
+LDLIBS := -l$(LIB)
+LDFLAGS := -L.
 
 TEST_FILES := $(wildcard test*.c)
 SRC_FILES := $(filter-out $(TEST_FILES), $(wildcard *.c))
@@ -57,7 +57,7 @@ docclean:
 	rm -rf $(DOC_DIR)
 
 test: $(AR_FILE)
-	$(CC) $(TEST_FILES) -o$(TEST_X) -l$(LIB)
+	$(CC) $(TEST_FILES) -o$(TEST_X) $(LDFLAGS) $(LDLIBS)
 	./$(TEST_X)
 
 install: all
