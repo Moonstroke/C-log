@@ -1,6 +1,6 @@
 # Output executables
 a.out
-test
+test_log
 
 # Object files
 *.o
