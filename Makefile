@@ -15,9 +15,9 @@ endif
 LDLIBS := -l$(LIB)
 LDFLAGS :=
 
-TEST_FILES := $(wildcard test*.c)
-SRC_FILES := $(filter-out $(TEST_FILES), $(wildcard *.c))
-OBJ_FILES := $(SRC_FILES:.c=.o)
+TEST_SRC := $(wildcard test*.c)
+SRC := $(filter-out $(TEST_SRC), $(wildcard *.c))
+OBJ := $(SRC:.c=.o)
 
 AR := ar
 AR_FLAGS := rcs
@@ -41,11 +41,11 @@ all: $(OBJ_FILES) $(AR_FILE)
 %.o: %.c
 	$(CC) -c $< -o$@ $(CFLAGS)
 
-$(AR_FILE): $(OBJ_FILES)
-	$(AR) $(AR_FLAGS) $(AR_FILE) $(OBJ_FILES)
+$(AR_FILE): $(OBJ)
+	$(AR) $(AR_FLAGS) $(AR_FILE) $(OBJ)
 
 clean:
-	rm -rf $(OBJ_FILES) $(TEST_X) $(TEST_LOG)
+	rm -rf $(OBJ) $(TEST_X) $(TEST_LOG)
 
 distclean: clean docclean
 	rm -rf $(AR_FILE)
@@ -57,7 +57,7 @@ docclean:
 	rm -rf $(DOC_DIR)
 
 test: distclean
-	$(CC) $(TEST_FILES) -o$(TEST_X) $(LDFLAGS) $(LDLIBS)
+	$(CC) $(TEST_SRC) -o$(TEST_X) $(LDFLAGS) $(LDLIBS)
 	./$(TEST_X)
 
 install: all
