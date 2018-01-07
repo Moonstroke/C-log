@@ -13,7 +13,7 @@ ifneq ($(OPT_L), n)
 endif
 
 LDLIBS := -l$(LIB)
-LDFLAGS := -L.
+LDFLAGS :=
 
 TEST_FILES := $(wildcard test*.c)
 SRC_FILES := $(filter-out $(TEST_FILES), $(wildcard *.c))
@@ -56,7 +56,7 @@ doc:
 docclean:
 	rm -rf $(DOC_DIR)
 
-test: $(AR_FILE)
+test: distclean
 	$(CC) $(TEST_FILES) -o$(TEST_X) $(LDFLAGS) $(LDLIBS)
 	./$(TEST_X)
 

@@ -5,6 +5,9 @@ compiler: gcc
 sudo: true
 
 
-script:
+before_script:
  - make
+ - sudo make install
+
+script:
  - make test
