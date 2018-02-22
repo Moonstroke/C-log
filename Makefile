@@ -3,7 +3,6 @@ OPT_L := 2
 
 LIB := log
 
-CC := gcc
 CFLAGS := -std=c11 -pedantic -Wall -Wextra -Wpadded
 ifeq ($(DEBUG), y)
 	CFLAGS += -g
