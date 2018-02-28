@@ -23,7 +23,7 @@ int main(void) {
 	const char *const msg = "Test message log";
 	const char *const msb = "\t\n\v\f\r ";
 
-	if(test_log_file == NULL) { // just in case
+	if(test_log_file == NULL) { /* just in case */
 		fprintf(stderr, "Unable to create file \"%s\"\n", fname);
 		fprintf(stderr, "Check your permissions in the current directory\n");
 		return -1;

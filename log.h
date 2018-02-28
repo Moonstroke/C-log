@@ -2,16 +2,16 @@
  * \file log.h
  * \author joH1
  *
- * This file contains the definition of a simple logging system.
+ * This file contains the definition of a simple logging system in C.
  *
- * Messages will be ouput on \e stderr by default, however the log file can be
- * easily overwritten.
+ * Messages will be ouput on \a stderr by default, however the log file can be
+ * overwritten with \a log_setlogfile.
  *
  * Each call to a logging function will output its message -- given as a
- * format string and parameters.
+ * <i>printf</i>-like format string and parameters.
  *
- * A message is provided with a priority level, and can be filtered out, by
- * specifiying a filter level.
+ * A log message is provided with a priority level, and can be filtered out, by
+ * specifiying a global filter level higher than the priority of the message.
  *
  * A message containing only <b>blank characters</b>, \e i.e.:
  * - \c '\\t', <i>Horizontal Tabulation</i> (Tab),
@@ -20,10 +20,9 @@
  * - \c '\\f', <i>Form Feed</i> (not much used either)
  * - \c '\\r', <i>Carriage Return</i> (the cursor returns to the beginning of
  *   the line), and
- * - \c ' ' <i>blank space</i>
- *
- * will be output without header line or level display, this functionality
- * allows to clarify the output and prioritize the display.
+ * - \c ' ' <i>Space</i>
+ * will be output without header line or level. This feature allows clearer
+ * output and a hierarchy in the display.
  *
  * Likewise, a message whose first character is a line feed (\c '\\n') will be
  * output (header line and level included) \e after a new blank line.
@@ -32,13 +31,13 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <stdarg.h>
-#include <stdio.h>
+#include <stdarg.h> /* for va_* */
+#include <stdio.h> /* for FILE, fprintf, fputs */
 
 
 /**
- * \brief Defines the level of priority of a logging message, or an alias to
- * set the log filter.
+ * \brief Defines the level of priority of a logging message, or an alias for a
+ * log filter.
  *
  * The message is to be filtered out from logs if its priority level is
  * inferior to the one set in log_setfilter().
@@ -136,7 +135,7 @@ const char *log_gettimefmt(void);
  * \brief Logs a message of given \a level, with one list of variadic arguments.
  *
  * \param[in] level The level of the message
- * \param[in] fmt   The string format for the message 
+ * \param[in] fmt   The string format for the message
  * \param[in] args   The arguments to format, as a \a va_list
  *
  * \sa mlog
@@ -144,7 +143,7 @@ const char *log_gettimefmt(void);
 void vmlog(LogLevel level, const char *fmt, va_list args);
 
 /**
- * \brief Logs a message in the file (on stderr if none was specified).
+ * \brief Logs a message in the og file (on stderr if none was specified).
  *
  * Uses same format than printf() et al.
  *

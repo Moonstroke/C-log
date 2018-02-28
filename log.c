@@ -1,13 +1,12 @@
 #include "log.h"
 
-#include <ctype.h>
+#include <ctype.h> /* for isspace */
 #include <stdbool.h>
-#include <string.h>
-#include <time.h>
+#include <time.h> /* for time_t, time, strftime, localtime */
 
 
-static FILE *logfile = NULL; // cannot initialize to stderr :'( gcc says
-                             //"error: initializer element is not constant"
+static FILE *logfile = NULL; /* cannot initialize to stderr :'( gcc says
+                                "error: initializer element is not constant" */
 
 static const char *header = NULL;
 
@@ -33,11 +32,13 @@ void log_setlogfile(FILE *const f) {
 
 void log_setheader(const char *const value) {
 	header = value;
-	// determine if datetime should be printed
-	//const int l = strlen(header) - 1;
-	//if(l >= 0 && (print_datetime = header[l] == '+')) {
-	//	header[l] = '\0'; // <--- SEGFAULT here
-	//}
+	/* determine if datetime should be printed */
+	/*
+	const int l = strlen(header) - 1;
+	if(l >= 0 && (print_datetime = header[l] == '+')) {
+		header[l] = '\0'; // <--- SEGFAULT here
+	}
+	*/
 }
 
 void log_setfilter(const LogLevel lvl) { logfilter = lvl; }
@@ -63,7 +64,7 @@ static bool msgblank(const char *const msg) {
 }
 
 void vmlog(const LogLevel lvl, const char *const fmt, va_list a) {
-	// initialize logfile if it has not been already
+	/* Initialize logfile if it has not been already */
 	if(logfile == NULL)
 		logfile = stderr;
 	if(msgblank(fmt))
