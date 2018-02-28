@@ -1,68 +1,121 @@
-DEBUG := n
-OPT_L := 2
+## PROJECT SETTINGS ##
 
-LIB := log
 
-CFLAGS := -std=c11 -pedantic -Wall -Wextra -Wpadded
-ifeq ($(DEBUG), y)
-	CFLAGS += -g
-endif
-ifneq ($(OPT_L), n)
-	CFLAGS += -O$(OPT_L)
-endif
+# Project name
+PROJECT_NAME := log
 
-LDLIBS := -l$(LIB)
-LDFLAGS :=
 
-TEST_SRC := $(wildcard test*.c)
-SRC := $(filter-out $(TEST_SRC), $(wildcard *.c))
-OBJ := $(SRC:.c=.o)
+# Project directories
+INC_DIR := .
+SRC_DIR := .
+OBJ_DIR := .
 
-AR := ar
-AR_FLAGS := rcs
-AR_FILE := lib$(LIB).a
 
-TEST_X := test_log
-TEST_LOG := test.log
-
+# Documentation
 DOC_PRG := doxygen
 DOC_CFG := Doxyfile
 DOC_DIR := doc
 
+
+# Installation directory
 INST_DIR := /usr/local
 
 
-.PHONY: all clean distclean doc cleandoc test install
+
+## BUILD SETTINGS ##
 
 
-all: $(OBJ_FILES) $(AR_FILE)
+# Debugging
+# y/n
+DEBUG := n
 
-%.o: %.c
+# Optimization level at compilation (0 => no optimization)
+# 0..3/s
+OPTIM_LVL := 2
+
+
+
+## VARIABLES ##
+
+
+# Test executable
+TEST_EXEC := test_$(PROJECT_NAME)
+
+# Tests files
+TEST_SRC := $(wildcard $(SRC_DIR)/test*.c)
+TEST_OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_SRC))
+
+# Project sources and object files
+SRC := $(filter-out $(TEST_SRC), $(wildcard $(SRC_DIR)/*.c))
+OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+
+# Library archive
+AR_LIB := lib$(PROJECT_NAME).a
+
+
+# Compilation flags
+CFLAGS := -std=c11 -pedantic -Wall -Wextra -Wpadded -O$(OPTIM_LVL) -I$(INC_DIR)
+ifeq ($(DEBUG), y)
+	CFLAGS += -g
+endif
+
+# The libraries to link against
+LDLIBS := -llog
+
+# Linkage flags
+LDFLAGS := -L.
+
+
+
+## RULES ##
+
+# All rule names that do not refer to a file
+.PHONY: all clean distclean doc test testclean
+
+# The default rule to execute
+all: testclean $(AR_LIB)
+
+# Linkage
+$(AR_LIB): $(OBJ)
+	$(AR) rcs $(AR_LIB) $(OBJ_DIR)/*.o
+
+# File-wise compilation
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $< -o$@ $(CFLAGS)
 
-$(AR_FILE): $(OBJ)
-	$(AR) $(AR_FLAGS) $(AR_FILE) $(OBJ)
 
+# Remove compiled files (objects)
 clean:
-	rm -rf $(OBJ) $(TEST_X) $(TEST_LOG)
+	@rm -rf $(OBJ_DIR)/*.o
 
-distclean: clean docclean
-	rm -rf $(AR_FILE)
+# Reset the project to its initial state
+distclean: clean docclean testclean
+	@rm -rf $(AR_LIB)
 
+# (Re)generate documentation
 doc:
-	$(DOC_PRG) $(DOC_CFG)
+	@$(DOC_PRG) $(DOC_CFG)
 
+# Remove documentation
 docclean:
-	rm -rf $(DOC_DIR)
+	@rm -rf $(DOC_DIR)
 
-test: distclean
-	$(CC) $(TEST_SRC) -o$(TEST_X) $(LDFLAGS) $(LDLIBS)
-	./$(TEST_X)
+# Build and launch tests
+test: $(TEST_OBJ) $(AR_LIB)
+	$(CC) -o$(TEST_EXEC) $^ $(LDLIBS) $(LDFLAGS)
+	./$(TEST_EXEC)
 
-install: all
-	cp --update --target-directory=$(INST_DIR)/include log.h
-	cp --update --target-directory=$(INST_DIR)/lib $(AR_FILE)
+# Remove test build files
+testclean:
+	@rm -rf $(TEST_OBJ) $(TEST_EXEC)
 
+# Install the project for system use
+install:
+	@cp --update --target-directory=$(INST_DIR)/include $(INC_DIR)/*
+	@cp --update --target-directory=$(INST_DIR)/lib $(AR_LIB)
+
+# Remove the project from the system
 uninstall:
-	rm -f $(INST_DIR)/include/log.h
-	rm -f $(INST_DIR)/lib/$(AR_FILE)
+	@rm -f $(patsubst $(INC_DIR)/%,$(INST_DIR)/include/%,$(wildcard $(INC_DIR)/*))
+	@rm -f $(INST_DIR)/lib/$(AR_LIB)
