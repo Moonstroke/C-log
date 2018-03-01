@@ -135,20 +135,9 @@ const char *log_gettimefmt(void);
 
 
 /**
- * \brief Logs a message of given \a level, with one list of variadic arguments.
+ * \brief Logs a message in the log file (on stderr if none was specified).
  *
- * \param[in] level The level of the message
- * \param[in] fmt   The string format for the message
- * \param[in] args   The arguments to format, as a \a va_list
- *
- * \sa mlog
- */
-void vmlog(LogLevel level, const char *fmt, va_list args);
-
-/**
- * \brief Logs a message in the og file (on stderr if none was specified).
- *
- * Uses same format than printf() et al.
+ * The format string uses \a printf() 's formatting flags.
  *
  * \note If fmt starts with a \c '\\n' character, a new line will be output just
  *       before the message.
@@ -164,127 +153,84 @@ void vmlog(LogLevel level, const char *fmt, va_list args);
  * \sa warning
  * \sa error
  */
-inline void mlog(LogLevel level, const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(level, fmt, args);
-	va_end(args);
-}
-
-
+void logmsg(LogLevel level, const char *fmt, ...);
 
 /**
  * \brief Logs a debugging message.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void debug(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_DEBUG, fmt, args);
-	va_end(args);
-}
+#define debug(...) logmsg(LOG_DEBUG, __VA_ARGS__)
 
 /**
  * \brief Logs a detailled information message.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void verbose(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_VERBOSE, fmt, args);
-	va_end(args);
-}
+#define verbose(...) logmsg(LOG_VERBOSE, __VA_ARGS__)
 
 /**
  * \brief Logs a basic information message.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void info(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_INFO, fmt, args);
-	va_end(args);
-}
+#define info(...) logmsg(LOG_INFO, __VA_ARGS__)
 
 /**
  * \brief Logs an information message that requires attention.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void notice(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_NOTICE, fmt, args);
-	va_end(args);
-}
+#define notice(...) logmsg(LOG_NOTICE, __VA_ARGS__)
 
 /**
  * \brief Logs a warning message.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void warning(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_WARNING, fmt, args);
-	va_end(args);
-}
+#define warning(...) logmsg(LOG_WARNING, __VA_ARGS__)
 
 /**
  * \brief Logs an error message.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void error(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_ERROR, fmt, args);
-	va_end(args);
-}
+#define error(...) logmsg(LOG_ERROR, __VA_ARGS__)
 
 /**
  * \brief Logs a fatal error message.
  *
  * \note Use before a call to \a exit(), or a return from \a main.
  *
- * \param[in] fmt The string format for the message
- * \param[in] ... The arguments to format
+ * \param[in] ... The format string and the optional arguments
  *
- * \sa mlog
- * \sa vmlog
+ * \sa logmsg
  */
-inline void fatal(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vmlog(LOG_FATAL, fmt, args);
-	va_end(args);
-}
+#define fatal(...) logmsg(LOG_FATAL, __VA_ARGS__)
+
+
+/**
+ * \brief Logs a message of given \a level, with one list of variadic arguments.
+ *
+ * \param[in] level The level of the message
+ * \param[in] fmt   The string format for the message
+ * \param[in] args   The arguments to format, as a \a va_list
+ *
+ * \sa logmsg
+ */
+void vlogmsg(LogLevel level, const char *fmt, va_list args);
+
 
 #endif /* LOG_H */

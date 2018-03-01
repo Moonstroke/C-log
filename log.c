@@ -71,7 +71,14 @@ const char *log_gettimefmt(void) {
 }
 
 
-void vmlog(const LogLevel lvl, const char *const fmt, va_list a) {
+void logmsg(const LogLevel level, const char *const fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	vlogmsg(level, fmt, args);
+	va_end(args);
+}
+
+void vlogmsg(const LogLevel lvl, const char *const fmt, va_list a) {
 	/* Initialize logfile if it has not been already */
 	if(logfile == NULL)
 		logfile = stderr;
@@ -91,10 +98,3 @@ void vmlog(const LogLevel lvl, const char *const fmt, va_list a) {
 		fprintf(logfile, "\n");
 	}
 }
-
-extern void debug(const char *fmt, ...);
-extern void verbose(const char *fmt, ...);
-extern void info(const char *fmt, ...);
-extern void warning(const char *fmt, ...);
-extern void error(const char *fmt, ...);
-extern void fatal(const char *fmt, ...);
