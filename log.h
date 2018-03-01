@@ -53,7 +53,7 @@ typedef enum {
 	LOG_INFO,
 	/**< An information message */
 	LOG_WARNING,
-	/**< Indicates a malfunction in the system */
+	/**< Indicates an unexpected state of the system */
 	LOG_ERROR,
 	/**< Denotes a severe unexpected behavior which can lead to system
 	     failure */
