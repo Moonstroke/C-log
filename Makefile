@@ -44,6 +44,7 @@ TEST_EXEC := test_$(PROJECT_NAME)
 # Tests files
 TEST_SRC := $(wildcard $(SRC_DIR)/test*.c)
 TEST_OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_SRC))
+TEST_LOG := test.log
 
 # Project sources and object files
 SRC := $(filter-out $(TEST_SRC), $(wildcard $(SRC_DIR)/*.c))
@@ -108,7 +109,7 @@ test: $(TEST_OBJ) $(AR_LIB)
 
 # Remove test build files
 testclean:
-	@rm -rf $(TEST_OBJ) $(TEST_EXEC)
+	@rm -rf $(TEST_OBJ) $(TEST_EXEC) $(TEST_LOG)
 
 # Install the project for system use
 install:
