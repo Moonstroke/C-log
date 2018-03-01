@@ -34,6 +34,8 @@
 #include <stdarg.h> /* for va_* */
 #include <stdio.h> /* for FILE, fprintf, fputs */
 
+#include "log_attrs.h" /* for function attributes */
+
 
 /**
  * \brief Defines the level of priority of a logging message, or an alias for a
@@ -81,14 +83,14 @@ typedef enum {
  * \note If none is set (this function never gets called), messages will be
  * printed to \a stderr.
  */
-void log_setlogfile(FILE *logfile);
+void log_setlogfile(FILE *logfile) NOTNULL(1);
 
 /**
  * \brief Retrieve the log file.
  *
  * \return The file where messages are logged.
  */
-FILE *log_getlogfile(void);
+FILE *log_getlogfile(void) PURE;
 
 /**
  * \brief Sets a priority level to filter log messages.
@@ -106,7 +108,7 @@ void log_setfilter(LogLevel filterlevel);
  *
  * \sa log_getfiltername
  */
-LogLevel log_getfilter(void);
+LogLevel log_getfilter(void) PURE;
 
 /**
  * \brief Gets the name of the filter level.
@@ -115,7 +117,7 @@ LogLevel log_getfilter(void);
  *
  * \sa log_getfilter
  */
-const char *log_getfiltername(void);
+const char *log_getfiltername(void) PURE;
 
 
 /**
@@ -130,7 +132,7 @@ void log_setheader(const char *header);
  *
  * \return header The header line, or \c NULL if none is set.
  */
-const char *log_getheader(void);
+const char *log_getheader(void) PURE;
 
 /**
  * \brief Sets the date and time format used in the logging header -- if any.
@@ -145,7 +147,7 @@ void log_settimefmt(const char *fmt);
  *
  * \return The date and time format used in the header
  */
-const char *log_gettimefmt(void);
+const char *log_gettimefmt(void) PURE;
 
 
 /**
@@ -167,7 +169,7 @@ const char *log_gettimefmt(void);
  * \sa warning
  * \sa error
  */
-void logmsg(LogLevel level, const char *fmt, ...);
+void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
 
 /**
  * \brief Logs a debugging message.
@@ -244,7 +246,7 @@ void logmsg(LogLevel level, const char *fmt, ...);
  *
  * \sa logmsg
  */
-void vlogmsg(LogLevel level, const char *fmt, va_list args);
+void vlogmsg(LogLevel level, const char *fmt, va_list args) PRINTF(2, 0);
 
 
 #endif /* LOG_H */
