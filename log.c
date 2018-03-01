@@ -35,7 +35,11 @@ static inline bool msgblank(const char *const msg) {
 
 
 void log_setlogfile(FILE *const f) {
-	logfile = f ? f : stderr;
+	logfile = (f ? f : stderr);
+}
+
+FILE *log_getlogfile(void) {
+	return logfile ? logfile : stderr;
 }
 
 void log_setheader(const char *const value) {
@@ -47,6 +51,10 @@ void log_setheader(const char *const value) {
 		header[l] = '\0'; // <--- SEGFAULT here
 	}
 	*/
+}
+
+const char *log_getheader(void) {
+	return header;
 }
 
 void log_setfilter(const LogLevel lvl) {

@@ -84,6 +84,13 @@ typedef enum {
 void log_setlogfile(FILE *logfile);
 
 /**
+ * \brief Retrieve the log file.
+ *
+ * \return The file where messages are logged.
+ */
+FILE *log_getlogfile(void);
+
+/**
  * \brief Sets a priority level to filter log messages.
  *
  * Only output messages with \code level >= lvl \endcode.
@@ -101,7 +108,6 @@ void log_setfilter(LogLevel filterlevel);
  */
 LogLevel log_getfilter(void);
 
-
 /**
  * \brief Gets the name of the filter level.
  *
@@ -111,12 +117,20 @@ LogLevel log_getfilter(void);
  */
 const char *log_getfiltername(void);
 
+
 /**
  * \brief Sets the heading line to start each log message with.
  *
  * \param[in] header The header line, or \c NULL for none
  */
 void log_setheader(const char *header);
+
+/**
+ * \brief Retrieves the heading line.
+ *
+ * \return header The header line, or \c NULL if none is set.
+ */
+const char *log_getheader(void);
 
 /**
  * \brief Sets the date and time format used in the logging header -- if any.
