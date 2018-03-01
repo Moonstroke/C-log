@@ -84,7 +84,7 @@ void log_setlogfile(FILE *logfile);
 /**
  * \brief Sets a priority level to filter log messages.
  *
- * Only output messages with \code level >= lvl \endcode
+ * Only output messages with \code level >= lvl \endcode.
  *
  * \param[in] filterlevel The logging level to filter messages
  */
@@ -119,7 +119,8 @@ void log_setheader(const char *header);
 /**
  * \brief Sets the date and time format used in the logging header -- if any.
  *
- * \param[in] fmt The format for date-time output after the header
+ * \param[in] fmt The format for date-time output after the header, in
+ *            \a strftime format.
  */
 void log_settimefmt(const char *fmt);
 
@@ -252,7 +253,7 @@ inline void error(const char *fmt, ...) {
 /**
  * \brief Logs a fatal error message.
  *
- * \note Use before a call to \a exit(), or \c return from the \a main
+ * \note Use before a call to \a exit(), or a return from \a main.
  *
  * \param[in] fmt The string format for the message
  * \param[in] ... The arguments to format
