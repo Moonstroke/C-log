@@ -35,7 +35,7 @@ void log_setheader(const char *const value) {
 	/* determine if datetime should be printed */
 	/*
 	const int l = strlen(header) - 1;
-	if(l >= 0 && (print_datetime = header[l] == '+')) {
+	if(l >= 0 && (print_datetime = (header[l] == '+'))) {
 		header[l] = '\0'; // <--- SEGFAULT here
 	}
 	*/
@@ -53,10 +53,10 @@ const char *log_gettimefmt(void) { return timefmt; }
 
 
 static inline void printheader(FILE *const out) {
+	static char date[32] = {0};
 	time_t t = time(NULL);
-	char date[32] = {[0] = ' ', 0};
 	strftime(date + 1, 30, timefmt, localtime(&t));
-	fprintf(out, "%s%s\n", header, date);
+	fprintf(out, "%s %s\n", header, date);
 }
 
 static bool msgblank(const char *const msg) {
