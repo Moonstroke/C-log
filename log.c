@@ -35,11 +35,11 @@ static inline bool msgblank(const char *const msg) {
 
 
 void log_setlogfile(FILE *const f) {
-	logfile = (f ? f : stderr);
+	logfile = f;
 }
 
 FILE *log_getlogfile(void) {
-	return logfile ? logfile : stderr;
+	return logfile;
 }
 
 void log_setheader(const char *const value) {
