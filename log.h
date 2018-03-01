@@ -52,6 +52,8 @@ typedef enum {
 	/**< A detailled information message */
 	LOG_INFO,
 	/**< An information message */
+	LOG_NOTICE,
+	/**< An important information */
 	LOG_WARNING,
 	/**< Indicates an unexpected state of the system */
 	LOG_ERROR,
@@ -158,6 +160,7 @@ void vmlog(LogLevel level, const char *fmt, va_list args);
  * \sa debug
  * \sa verbose
  * \sa info
+ * \sa notice
  * \sa warning
  * \sa error
  */
@@ -215,6 +218,22 @@ inline void info(const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
 	vmlog(LOG_INFO, fmt, args);
+	va_end(args);
+}
+
+/**
+ * \brief Logs an information message that requires attention.
+ *
+ * \param[in] fmt The string format for the message
+ * \param[in] ... The arguments to format
+ *
+ * \sa mlog
+ * \sa vmlog
+ */
+inline void notice(const char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	vmlog(LOG_NOTICE, fmt, args);
 	va_end(args);
 }
 
