@@ -57,19 +57,24 @@ void logmsg(const LogLevel level, const char *const fmt, ...) {
 	va_end(args);
 }
 
-void vlogmsg(const LogLevel lvl, const char *const fmt, va_list a) {
-	/* Initialize logfile if it has not been already */
-	if(logfile == NULL)
+void vlogmsg(const LogLevel lvl, const char *fmt, va_list a) {
+	if(logfile == NULL) {
+		/* logfile has not yet been initialized, we do it now */
 		logfile = stderr;
-	if(msgblank(fmt))
-		fputs(fmt, logfile);
-	else if(logfilter <= lvl) {
+	}
+	if(logfilter <= lvl) {
+		if(msgblank(fmt)) {
+			fputs(fmt, logfile);
+			return;
+		}
 		va_list args;
-		if(*fmt == '\n')
+		if(*fmt == '\n') {
 			fputs("\n", logfile);
+			++fmt; /* omit the new line from the message */
+		}
 		fprintf(logfile, "%s -- ", headers[lvl]);
 		va_copy(args, a);
-		vfprintf(logfile, fmt + (*fmt == '\n'), args);
+		vfprintf(logfile, fmt, args);
 		va_end(args);
 		fprintf(logfile, "\n");
 	}
