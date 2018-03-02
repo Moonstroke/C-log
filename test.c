@@ -66,6 +66,7 @@ int main(void) {
 	// TODO
 
 	testlog("test blank message\n");
+	debug(msb);
 	// TODO
 
 	testlog("end tests\n");
