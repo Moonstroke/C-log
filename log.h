@@ -5,7 +5,7 @@
  * This file contains the definition of a simple logging system in C.
  *
  * Messages will be ouput on \a stderr by default, however the log file can be
- * overwritten with \a log_setlogfile.
+ * overwritten using \a log_setlogfile.
  *
  * Each call to a logging function will output its message -- given as a
  * <i>printf</i>-like format string and parameters.
@@ -21,11 +21,11 @@
  * - \c '\\r', <i>Carriage Return</i> (the cursor returns to the beginning of
  *   the line), and
  * - \c ' ' <i>Space</i>
- * will be output without header line or level. This feature allows clearer
+ * will be output without header (level name). This feature allows clearer
  * output and a hierarchy in the display.
  *
  * Likewise, a message whose first character is a line feed (\c '\\n') will be
- * output (header line and level included) \e after a new blank line.
+ * output (level name included) \e after a new blank line.
  */
 
 #ifndef LOG_H
@@ -118,36 +118,6 @@ LogLevel log_getfilter(void) PURE;
  * \sa log_getfilter
  */
 const char *log_getfiltername(void) PURE;
-
-
-/**
- * \brief Sets the heading line to start each log message with.
- *
- * \param[in] header The header line, or \c NULL for none
- */
-void log_setheader(const char *header);
-
-/**
- * \brief Retrieves the heading line.
- *
- * \return header The header line, or \c NULL if none is set.
- */
-const char *log_getheader(void) PURE;
-
-/**
- * \brief Sets the date and time format used in the logging header -- if any.
- *
- * \param[in] fmt The format for date-time output after the header, in
- *            \a strftime format.
- */
-void log_settimefmt(const char *fmt);
-
-/**
- * \brief Retrieves the date and time format.
- *
- * \return The date and time format used in the header
- */
-const char *log_gettimefmt(void) PURE;
 
 
 /**
