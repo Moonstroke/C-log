@@ -16,10 +16,6 @@ int main(void) {
 	const LogLevel lvl = LOG_DEBUG;
 	const char *const lname = "DEBUG";
 
-	const char *const hdr = "Test header log";
-
-	const char *const tfm = "%d/%m/%Y";
-
 	const char *const msg = "Test message log";
 	const char *const msb = "\t\n\v\f\r ";
 
@@ -45,21 +41,6 @@ int main(void) {
 	assert(strcmp(log_getfiltername(), lname) == 0);
 	testlog("OK\n\n");
 
-	testlog("test log_setheader(NULL)\n");
-	log_setheader(NULL);
-	testlog("OK\n\n");
-
-	testlog("test log_setheader(\"%s\")\n", hdr);
-	log_setheader(hdr);
-	testlog("OK\n\n");
-
-	testlog("test log_settimefmt(\"%s\")\n", tfm);
-	log_settimefmt(tfm);
-	testlog("OK\n\n");
-
-	testlog("test log_gettimefmt() == \"%s\"\n", tfm);
-	assert(strcmp(log_gettimefmt(), tfm) == 0);
-	testlog("OK\n\n");
 
 	testlog("test debug(\"%s\")\n", msg);
 	debug(msg);
