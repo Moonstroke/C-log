@@ -76,6 +76,40 @@ typedef enum {
 
 
 /**
+ * \brief Defines attributes to modify the aspect of the logging output.
+ */
+typedef enum {
+	/**
+	 * \brief The message is output in plain text, with only the priority level.
+	 */
+	LOG_OUTPUT_MINIMAL = 0x0,
+	/**
+	 * \brief The message header displays the logging time.
+	 */
+	LOG_OUTPUT_TIME = 0x1,
+	/**
+	 * \brief The message logs file name and line number info.
+	 */
+	LOG_OUTPUT_FILE = 0x2,
+	/**
+	 * \brief Logs the name of the function the message is logged within.
+	 */
+	LOG_OUTPUT_FUNC = 0x4,
+	/**
+	 * \brief The message is output colored (using ANSI escape sequences).
+	 *
+	 * \note Only the header (level name and optionally verbose output info) is
+	 *       colored, the message itself is not.
+	 */
+	LOG_OUTPUT_COLORED = 0x10,
+	/**
+	*  \brief The message is output with time, line, function and file info.
+	*/
+	LOG_OUTPUT_VERBOSE = LOG_OUTPUT_TIME | LOG_OUTPUT_FILE | LOG_OUTPUT_FUNC,
+} OutputAttribute;
+
+
+/**
  * \brief Specifies the file to log messages in.
  *
  * \param[in] logfile The file where to log messages, or \c NULL for \a stderr
@@ -119,6 +153,20 @@ LogLevel log_getfilter(void) PURE;
  */
 const char *log_getfiltername(void) PURE;
 
+/**
+ * \brief Sets the output attributes.
+ *
+ * \param[in] attrs The OutputAttribute, or several \c OR -ed together
+ */
+void log_setoutputattrs(OutputAttribute attrs);
+
+/**
+ * \brief Retrieves the output attributes.
+ *
+ * \return The \c OR sum of the log output attributes.
+ */
+OutputAttribute log_getoutputattrs(void) PURE;
+
 
 /**
  * \brief Logs a message in the log file (on stderr if none was specified).
@@ -128,6 +176,9 @@ const char *log_getfiltername(void) PURE;
  * \note If fmt starts with a \c '\\n' character, a new line will be output just
  *       before the message.
  *
+ * \param[in] file  The absolute path of the source file
+ * \param[in] line  The line in the at which the logging is called
+ * \param[in] func  The function within which the call is made
  * \param[in] level The level of the message
  * \param[in] fmt   The string format for the message
  * \param[in] ...   The arguments to format
@@ -139,7 +190,8 @@ const char *log_getfiltername(void) PURE;
  * \sa warning
  * \sa error
  */
-void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
+void logmsg(const char *file, unsigned int line, const char *func,
+            LogLevel level, const char *fmt, ...) PRINTF(5, 6);
 
 /**
  * \brief Logs a debugging message.
@@ -148,7 +200,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define debug(...) logmsg(LOG_DEBUG, __VA_ARGS__)
+#define debug(...) logmsg(__FILE__, __LINE__, __func__, LOG_DEBUG, __VA_ARGS__)
 
 /**
  * \brief Logs a detailled information message.
@@ -157,7 +209,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define verbose(...) logmsg(LOG_VERBOSE, __VA_ARGS__)
+#define verbose(...) logmsg(__FILE__, __LINE__, __func__, LOG_VERBOSE, __VA_ARGS__)
 
 /**
  * \brief Logs a basic information message.
@@ -166,7 +218,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define info(...) logmsg(LOG_INFO, __VA_ARGS__)
+#define info(...) logmsg(__FILE__, __LINE__, __func__, LOG_INFO, __VA_ARGS__)
 
 /**
  * \brief Logs an information message that requires attention.
@@ -175,7 +227,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define notice(...) logmsg(LOG_NOTICE, __VA_ARGS__)
+#define notice(...) logmsg(__FILE__, __LINE__, __func__, LOG_NOTICE, __VA_ARGS__)
 
 /**
  * \brief Logs a warning message.
@@ -184,7 +236,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define warning(...) logmsg(LOG_WARNING, __VA_ARGS__)
+#define warning(...) logmsg(__FILE__, __LINE__, __func__, LOG_WARNING, __VA_ARGS__)
 
 /**
  * \brief Logs an error message.
@@ -193,7 +245,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define error(...) logmsg(LOG_ERROR, __VA_ARGS__)
+#define error(...) logmsg(__FILE__, __LINE__, __func__, LOG_ERROR, __VA_ARGS__)
 
 /**
  * \brief Logs a fatal error message.
@@ -204,7 +256,7 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-#define fatal(...) logmsg(LOG_FATAL, __VA_ARGS__)
+#define fatal(...) logmsg(__FILE__, __LINE__, __func__, LOG_FATAL, __VA_ARGS__)
 
 
 /**
@@ -216,7 +268,8 @@ void logmsg(LogLevel level, const char *fmt, ...) PRINTF(2, 3);
  *
  * \sa logmsg
  */
-void vlogmsg(LogLevel level, const char *fmt, va_list args) PRINTF(2, 0);
+void vlogmsg(const char *file, unsigned int line, const char *func,
+             LogLevel level, const char *fmt, va_list args) PRINTF(5, 0);
 
 
 #endif /* LOG_H */
