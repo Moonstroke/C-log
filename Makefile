@@ -8,7 +8,7 @@ PROJECT_NAME := log
 # Project directories
 INC_DIR := .
 SRC_DIR := .
-OBJ_DIR := .
+OBJ_DIR := obj
 
 
 # Documentation
@@ -88,7 +88,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Remove compiled files (objects)
 clean:
-	@rm -rf $(OBJ_DIR)/*.o
+	@rm -rf $(OBJ_DIR)
 
 # Reset the project to its initial state
 distclean: clean docclean testclean
@@ -113,7 +113,7 @@ testclean:
 
 # Install the project for system use
 install:
-	@cp --update --target-directory=$(INST_DIR)/include $(INC_DIR)/*
+	@cp --update --target-directory=$(INST_DIR)/include $(INC_DIR)/*.h
 	@cp --update --target-directory=$(INST_DIR)/lib $(AR_LIB)
 
 # Remove the project from the system
