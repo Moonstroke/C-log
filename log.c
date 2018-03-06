@@ -32,10 +32,6 @@ FILE *log_getlogfile(void) {
 	return logfile;
 }
 
-const char *log_getheader(void) {
-	return header;
-}
-
 void log_setfilter(const LogLevel lvl) {
 	logfilter = lvl;
 }
