@@ -113,7 +113,7 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		}
 		if(_outputattrs & LOG_OUTPUT_FUNC)
 			fprintf(_logfile, "%s() ", func);
-		fprintf(_logfile, "%s -- ", _levelheaders[lvl]);
+		fprintf(_logfile, "%-7s -- ", _levelheaders[lvl]);
 		if(_outputattrs & LOG_OUTPUT_COLORED)
 			END_COLORS();
 
