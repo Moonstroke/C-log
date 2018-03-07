@@ -8,7 +8,7 @@
 
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
-static LogLevel _logfilter = LOGF_ALL;
+static LogLevel _logfilter = LOG_FILTER_ALL;
 static const char *const _levelheaders[] = {
 		[LOG_DEBUG] = "DEBUG",
 		[LOG_VERBOSE] = "VERBOSE",
