@@ -21,11 +21,13 @@
  * - \c '\\r', <i>Carriage Return</i> (the cursor returns to the beginning of
  *   the line), and
  * - \c ' ' <i>Space</i>
- * will be output without header (level name). This feature allows clearer
- * output and a hierarchy in the display.
+ * will be output without header (level name, time, file info, function name).
+ * This feature allows clearer output and a hierarchy in the display.
  *
  * Likewise, a message whose first character is a line feed (\c '\\n') will be
  * output (level name included) \e after a new blank line.
+ *
+ *
  */
 
 #ifndef LOG_H
@@ -133,7 +135,7 @@ FILE *log_getlogfile(void) PURE;
  *
  * \param[in] filterlevel The logging level to filter messages
  */
-void log_setfilter(LogLevel filterlevel);
+void log_setfilterlevel(LogLevel filterlevel);
 
 /**
  * \brief Retrieves the filter level.
@@ -142,7 +144,7 @@ void log_setfilter(LogLevel filterlevel);
  *
  * \sa log_getfiltername
  */
-LogLevel log_getfilter(void) PURE;
+LogLevel log_getfilterlevel(void) PURE;
 
 /**
  * \brief Gets the name of the filter level.

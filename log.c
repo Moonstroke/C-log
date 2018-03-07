@@ -8,8 +8,8 @@
 
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
-static LogLevel _logfilter = LOG_FILTER_ALL;
-static const char *const _levelheaders[] = {
+static LogLevel _filterlevel = LOG_FILTER_ALL;
+static const char *const _levelnames[] = {
 		[LOG_DEBUG] = "DEBUG",
 		[LOG_VERBOSE] = "VERBOSE",
 		[LOG_INFO] = "INFO",
@@ -55,16 +55,16 @@ FILE *log_getlogfile(void) {
 	return _logfile;
 }
 
-void log_setfilter(const LogLevel lvl) {
-	_logfilter = lvl;
+void log_setfilterlevel(const LogLevel lvl) {
+	_filterlevel = lvl;
 }
 
-LogLevel log_getfilter(void) {
-	return _logfilter;
+LogLevel log_getfilterlevel(void) {
+	return _filterlevel;
 }
 
 const char *log_getfiltername(void) {
-	return _levelheaders[_logfilter];
+	return _levelnames[_filterlevel];
 }
 
 void log_setoutputattrs(const OutputAttribute a) {
@@ -90,7 +90,7 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		/* _logfile has not yet been initialized, we do it now */
 		_logfile = stderr;
 	}
-	if(_logfilter <= lvl) {
+	if(_filterlevel <= lvl) {
 		if(_msgblank(fmt)) {
 			fputs(fmt, _logfile);
 			return;
@@ -113,7 +113,7 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		}
 		if(_outputattrs & LOG_OUTPUT_FUNC)
 			fprintf(_logfile, "%s() ", func);
-		fprintf(_logfile, "%-7s -- ", _levelheaders[lvl]);
+		fprintf(_logfile, "%-7s -- ", _levelnames[lvl]);
 		if(_outputattrs & LOG_OUTPUT_COLORED)
 			END_COLORS();
 
