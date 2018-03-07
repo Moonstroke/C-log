@@ -262,6 +262,10 @@ void logmsg(const char *file, unsigned int line, const char *func,
 /**
  * \brief Logs a message of given \a level, with one list of variadic arguments.
  *
+ * \note \c va_end is not called on \a args inside the function, however since
+ *       the args list is operated on directly, its value is undefined after the
+ *       function call.
+ *
  * \param[in] level The level of the message
  * \param[in] fmt   The string format for the message
  * \param[in] args   The arguments to format, as a \a va_list
