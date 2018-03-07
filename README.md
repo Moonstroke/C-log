@@ -10,15 +10,15 @@ This project defines a simple message logging and sorting system in C.
 
 **Sumary table**
 
-Priority level|  Color |Priority description
-:------------:|:------:|:-------------------
-    `DEBUG`   |  Blue  |Development info for the programmer.
-   `VERBOSE`  |  Cyan  |Details, extraneous information.
-    `INFO`    |  Green |Common information.
-   `NOTICE`   | Yellow |Important information that requires attention.
-   `WARNING`  | Magenta|Indicates unexpected behaviour or potential problem.
-    `ERROR`   |   Red  |The system is in a failure state and will not work properly.
-    `FATAL`   |Bold red|The system can not continue and will exit immediately.
+|Priority level|  Color |Priority description
+|:------------:|:------:|:-------------------
+|    `DEBUG`   |  Blue  |Development info for the programmer.
+|   `VERBOSE`  |  Cyan  |Details, extraneous information.
+|    `INFO`    |  Green |Common information.
+|   `NOTICE`   | Yellow |Important information that requires attention.
+|   `WARNING`  | Magenta|Indicates unexpected behaviour or potential problem.
+|    `ERROR`   |   Red  |The system is in a failure state and will not work properly.
+|    `FATAL`   |Bold red|The system can not continue and will exit immediately.
 
 
 
