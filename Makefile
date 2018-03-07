@@ -6,7 +6,7 @@ PROJECT_NAME := log
 
 
 # Project directories
-INC_DIR := .
+INC_DIR := inc
 SRC_DIR := .
 OBJ_DIR := obj
 
