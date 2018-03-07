@@ -138,7 +138,7 @@ void log_setfilter(LogLevel filterlevel);
 /**
  * \brief Retrieves the filter level.
  *
- * \return The level of message filter
+ * \return The priority level of output filter.
  *
  * \sa log_getfiltername
  */
@@ -147,7 +147,7 @@ LogLevel log_getfilter(void) PURE;
 /**
  * \brief Gets the name of the filter level.
  *
- * \return The name of the filtering level, in uppercase, e.g. \c "DEBUG"
+ * \return The name of the filtering level, in uppercase, e.g. \c "DEBUG".
  *
  * \sa log_getfilter
  */
