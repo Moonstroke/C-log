@@ -9,7 +9,7 @@
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
 static LogLevel _logfilter = LOGF_ALL;
-static const char* _levelheaders[] = {
+static const char *const _levelheaders[] = {
 		[LOG_DEBUG] = "DEBUG",
 		[LOG_VERBOSE] = "VERBOSE",
 		[LOG_INFO] = "INFO",
@@ -21,7 +21,7 @@ static const char* _levelheaders[] = {
 
 static OutputAttribute _outputattrs = LOG_OUTPUT_MINIMAL;
 
-static const char *_colorcodes[] = {
+static const char *const _colorcodes[] = {
 	[LOG_DEBUG] = "34", /* blue */
 	[LOG_VERBOSE] = "36", /* cyan */
 	[LOG_INFO] = "32", /* green */
