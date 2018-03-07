@@ -78,7 +78,7 @@ all: testclean $(AR_LIB)
 
 # Linkage
 $(AR_LIB): $(OBJ)
-	$(AR) rcs $(AR_LIB) $(OBJ_DIR)/*.o
+	$(AR) rcs $(AR_LIB) $(OBJ)
 
 # File-wise compilation
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
