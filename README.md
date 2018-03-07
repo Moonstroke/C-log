@@ -1,5 +1,9 @@
 # C / log
 
+[![Build Status](https://travis-ci.org/Moonstroke/C-log.svg?branch=master)]
+(https://travis-ci.org/Moonstroke/C-log)
+
+
 ## A simple logging system in C
 
 This project defines a simple message logging and sorting system in C.
