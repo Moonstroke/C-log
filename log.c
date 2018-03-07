@@ -6,10 +6,10 @@
 
 
 
-static FILE *logfile = NULL; /* cannot initialize to stderr :'( error is
+static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
-static LogLevel logfilter = LOGF_ALL;
-static const char* headers[] = {
+static LogLevel _logfilter = LOGF_ALL;
+static const char* _levelheaders[] = {
 		[LOG_DEBUG] = "DEBUG",
 		[LOG_VERBOSE] = "VERBOSE",
 		[LOG_INFO] = "INFO",
@@ -21,7 +21,7 @@ static const char* headers[] = {
 
 static OutputAttribute _outputattrs = LOG_OUTPUT_MINIMAL;
 
-static const char *_color_codes[] = {
+static const char *_colorcodes[] = {
 	[LOG_DEBUG] = "34", /* blue */
 	[LOG_VERBOSE] = "36", /* cyan */
 	[LOG_INFO] = "32", /* green */
@@ -30,12 +30,12 @@ static const char *_color_codes[] = {
 	[LOG_ERROR] = "31", /* red */
 	[LOG_FATAL] = "1;31", /* bold red */
 };
-#define BEGIN_COLOR(lvl) fprintf(logfile, "\x1b[%sm", _color_codes[lvl])
-#define END_COLORS() fputs("\x1b[0m", logfile)
+#define BEGIN_COLOR(lvl) fprintf(_logfile, "\x1b[%sm", _colorcodes[lvl])
+#define END_COLORS() fputs("\x1b[0m", _logfile)
 
 
-static inline bool msgblank(const char *const msg) {
-	return *msg == '\0' || (isspace(*msg) && msgblank(msg + 1));
+static inline bool _msgblank(const char *const msg) {
+	return *msg == '\0' || (isspace(*msg) && _msgblank(msg + 1));
 }
 
 static inline void _printtime(void) {
@@ -43,28 +43,28 @@ static inline void _printtime(void) {
 	char s[12];
 	time(&t);
 	strftime(s, 12, "[%H:%M:%S] ", localtime(&t));
-	fputs(s, logfile);
+	fputs(s, _logfile);
 }
 
 
 void log_setlogfile(FILE *const f) {
-	logfile = f;
+	_logfile = f;
 }
 
 FILE *log_getlogfile(void) {
-	return logfile;
+	return _logfile;
 }
 
 void log_setfilter(const LogLevel lvl) {
-	logfilter = lvl;
+	_logfilter = lvl;
 }
 
 LogLevel log_getfilter(void) {
-	return logfilter;
+	return _logfilter;
 }
 
 const char *log_getfiltername(void) {
-	return headers[logfilter];
+	return _levelheaders[_logfilter];
 }
 
 void log_setoutputattrs(const OutputAttribute a) {
@@ -86,18 +86,18 @@ void logmsg(const char *const file, const unsigned int line, const char *const f
 
 void vlogmsg(const char *const file, const unsigned int line, const char *const func,
              const LogLevel lvl, const char *fmt, va_list a) {
-	if(logfile == NULL) {
-		/* logfile has not yet been initialized, we do it now */
-		logfile = stderr;
+	if(_logfile == NULL) {
+		/* _logfile has not yet been initialized, we do it now */
+		_logfile = stderr;
 	}
-	if(logfilter <= lvl) {
-		if(msgblank(fmt)) {
-			fputs(fmt, logfile);
+	if(_logfilter <= lvl) {
+		if(_msgblank(fmt)) {
+			fputs(fmt, _logfile);
 			return;
 		}
 		va_list args;
 		if(*fmt == '\n') {
-			fputs("\n", logfile);
+			fputs("\n", _logfile);
 			++fmt; /* omit the new line from the message */
 		}
 
@@ -107,21 +107,21 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		if(_outputattrs & LOG_OUTPUT_TIME)
 			_printtime();
 		if(_outputattrs & LOG_OUTPUT_FILE) {
-			fprintf(logfile, "%s:%u", file, line);
+			fprintf(_logfile, "%s:%u", file, line);
 			if(_outputattrs & LOG_OUTPUT_FUNC)
-				fputc(',', logfile);
-			fputc(' ', logfile);
+				fputc(',', _logfile);
+			fputc(' ', _logfile);
 		}
 		if(_outputattrs & LOG_OUTPUT_FUNC)
-			fprintf(logfile, "%s() ", func);
-		fprintf(logfile, "%s -- ", headers[lvl]);
+			fprintf(_logfile, "%s() ", func);
+		fprintf(_logfile, "%s -- ", _levelheaders[lvl]);
 		if(_outputattrs & LOG_OUTPUT_COLORED)
 			END_COLORS();
 
 		/* The mesage itself */
 		va_copy(args, a);
-		vfprintf(logfile, fmt, args);
+		vfprintf(_logfile, fmt, args);
 		va_end(args);
-		fprintf(logfile, "\n");
+		fprintf(_logfile, "\n");
 	}
 }
