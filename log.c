@@ -85,7 +85,7 @@ void logmsg(const char *const file, const unsigned int line, const char *const f
 }
 
 void vlogmsg(const char *const file, const unsigned int line, const char *const func,
-             const LogLevel lvl, const char *fmt, va_list a) {
+             const LogLevel lvl, const char *fmt, va_list args) {
 	if(_logfile == NULL) {
 		/* _logfile has not yet been initialized, we do it now */
 		_logfile = stderr;
@@ -95,7 +95,6 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 			fputs(fmt, _logfile);
 			return;
 		}
-		va_list args;
 		if(*fmt == '\n') {
 			fputs("\n", _logfile);
 			++fmt; /* omit the new line from the message */
@@ -119,9 +118,7 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 			END_COLORS();
 
 		/* The mesage itself */
-		va_copy(args, a);
 		vfprintf(_logfile, fmt, args);
-		va_end(args);
 		fprintf(_logfile, "\n");
 	}
 }
