@@ -195,6 +195,37 @@ void log_setoutputattrs(OutputAttribute attrs);
  */
 OutputAttribute log_getoutputattrs(void) PURE;
 
+/**
+ * \brief Specifies a lock function to acquire thread lock.
+ *
+ * \note In a multi-threaded environment where the log file can be accessed
+ *       concurrently, using this function ensure thread-safety. If the function
+ *       is not called, no thread lock will be performed.
+ *
+ * \param[in] lock The function to lock the thread
+ */
+void log_setlock(void (*lock)(void*)) NOTNULL(1);
+
+/**
+ * \brief Specifies the function to release the thread lock.
+ *
+ * \param[in] unlock The thread unlock function
+ */
+void log_setunlock(void (*unlock)(void*)) NOTNULL(1);
+
+/**
+ * \brief Gives the parameter to pass to the thread lock and unlock functions.
+ *
+ * \param[in] userdata The user data
+ */
+void log_setlockuserdata(void *userdata);
+
+/**
+ * \brief Retrieves the user pointer passed to the thread lock/unlock functions.
+ *
+ * \return The user data passed to lock funcs.
+ */
+void *log_getlockuserdata(void) PURE;
 
 /**
  * \brief Logs a message in the log file (on stderr if none was specified).

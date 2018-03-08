@@ -33,6 +33,14 @@ static const char *const _colorcodes[] = {
 #define BEGIN_COLOR(lvl) fprintf(_logfile, "\x1b[%sm", _colorcodes[lvl])
 #define END_COLORS() fputs("\x1b[0m", _logfile)
 
+#define DO_LOCK true
+#define DO_UNLOCK false
+static void (*_lockfuncs[2])(void*) = {
+	[DO_LOCK] = NULL,
+	[DO_UNLOCK] = NULL
+};
+static void *_lockuserdata = NULL;
+
 
 static INLINE PURE bool _msgblank(const char *msg) {
 	while(isspace(*msg)) ++msg;
@@ -45,6 +53,11 @@ static INLINE void _printtime(void) {
 	time(&t);
 	strftime(s, 12, "[%H:%M:%S] ", localtime(&t));
 	fputs(s, _logfile);
+}
+
+static INLINE void _lock(bool i) {
+	if(_lockfuncs[i])
+		_lockfuncs[i](_lockuserdata);
 }
 
 
@@ -76,6 +89,21 @@ OutputAttribute log_getoutputattrs(void) {
 	return _outputattrs;
 }
 
+void log_setlock(void (*const f)(void*)) {
+	_lockfuncs[DO_LOCK] = f;
+}
+
+void log_setunlock(void (*const f)(void*)) {
+	_lockfuncs[DO_UNLOCK] = f;
+}
+
+void log_setlockuserdata(void *const u) {
+	_lockuserdata = u;
+}
+
+void *log_getlockuserdata(void) {
+	return _lockuserdata;
+}
 
 void logmsg(const char *const file, const unsigned int line, const char *const func,
             const LogLevel level, const char *const fmt, ...) {
@@ -87,6 +115,9 @@ void logmsg(const char *const file, const unsigned int line, const char *const f
 
 void vlogmsg(const char *const file, const unsigned int line, const char *const func,
              const LogLevel lvl, const char *fmt, va_list args) {
+	/* acquire thread lock */
+	_lock(true);
+
 	if(_logfile == NULL) {
 		/* _logfile has not yet been initialized, we do it now */
 		_logfile = stderr;
@@ -94,6 +125,7 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 	if(_filterlevel <= lvl) {
 		if(_msgblank(fmt)) {
 			fputs(fmt, _logfile);
+			_lock(false);
 			return;
 		}
 		if(*fmt == '\n') {
@@ -121,5 +153,8 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		/* The mesage itself */
 		vfprintf(_logfile, fmt, args);
 		fprintf(_logfile, "\n");
+
+		/* release thread lock */
+		_lock(false);
 	}
 }
