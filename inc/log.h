@@ -1,6 +1,7 @@
 /**
  * \file log.h
  * \author joH1
+ * \version 0.1
  *
  * This file contains the definition of a simple logging system in C.
  *
