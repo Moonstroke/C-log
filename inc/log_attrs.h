@@ -23,6 +23,11 @@
 #define PURE __attribute__((__pure__, __warn_unused_result__))
 
 /**
+ * \brief The function call is replaced by its code when encountered.
+ */
+#define INLINE __attribute__((__always_inline__)) inline
+
+/**
  * \brief The function uses a \a printf -like formatting style.
  *
  * \param[in] fmt  The index of the format string arguments

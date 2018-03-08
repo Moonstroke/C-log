@@ -34,11 +34,12 @@ static const char *const _colorcodes[] = {
 #define END_COLORS() fputs("\x1b[0m", _logfile)
 
 
-static inline bool _msgblank(const char *const msg) {
-	return *msg == '\0' || (isspace(*msg) && _msgblank(msg + 1));
+static INLINE PURE bool _msgblank(const char *msg) {
+	while(isspace(*msg)) ++msg;
+	return !*msg;
 }
 
-static inline void _printtime(void) {
+static INLINE void _printtime(void) {
 	time_t t;
 	char s[12];
 	time(&t);
