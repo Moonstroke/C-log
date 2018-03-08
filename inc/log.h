@@ -268,9 +268,12 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *       the args list is operated on directly, its value is undefined after the
  *       function call.
  *
+ * \param[in] file  The absolute path of the source file
+ * \param[in] line  The line in the at which the logging is called
+ * \param[in] func  The function within which the call is made
  * \param[in] level The level of the message
  * \param[in] fmt   The string format for the message
- * \param[in] args   The arguments to format, as a \a va_list
+ * \param[in] args  The arguments to format, as a \a va_list
  *
  * \sa logmsg
  */
