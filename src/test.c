@@ -11,13 +11,13 @@ int main(void) {
 
 	const char *const fname = "test.log";
 
-	FILE *test_log_file = fopen(fname, "w");
+	FILE *const test_log_file = fopen(fname, "w");
 
 	const LogLevel lvl = CLOG_DEBUG;
 	const char *const lname = "DEBUG";
 
 	const char *const msg = "Test message log";
-	const char *const msb = "\t\n\v\f\r ";
+	const char *const msg_blank = "\t\n\v\f\r ";
 
 	if(test_log_file == NULL) { /* just in case */
 		fprintf(stderr, "Unable to create file \"%s\"\n", fname);
@@ -44,11 +44,11 @@ int main(void) {
 
 	testlog("test debug(\"%s\")\n", msg);
 	debug(msg);
-	// TODO
+	// TODO check file content
 
 	testlog("test blank message\n");
-	debug(msb);
-	// TODO
+	debug(msg_blank);
+	// TODO check file content
 
 	testlog("end tests\n");
 
