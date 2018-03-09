@@ -8,27 +8,27 @@
 
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
-static LogLevel _filterlevel = LOG_FILTER_ALL;
+static LogLevel _filterlevel = CLOG_FILTER_ALL;
 static const char *const _levelnames[] = {
-		[LOG_DEBUG] = "DEBUG",
-		[LOG_VERBOSE] = "VERBOSE",
-		[LOG_INFO] = "INFO",
-		[LOG_NOTICE] = "NOTICE",
-		[LOG_WARNING] = "WARNING",
-		[LOG_ERROR] = "ERROR",
-		[LOG_FATAL] = "FATAL"
+		[CLOG_DEBUG] = "DEBUG",
+		[CLOG_VERBOSE] = "VERBOSE",
+		[CLOG_INFO] = "INFO",
+		[CLOG_NOTICE] = "NOTICE",
+		[CLOG_WARNING] = "WARNING",
+		[CLOG_ERROR] = "ERROR",
+		[CLOG_FATAL] = "FATAL"
 };
 
-static OutputAttribute _outputattrs = LOG_ATTR_MINIMAL;
+static OutputAttribute _outputattrs = CLOG_ATTR_MINIMAL;
 
 static const char *const _colorcodes[] = {
-	[LOG_DEBUG] = "34", /* blue */
-	[LOG_VERBOSE] = "36", /* cyan */
-	[LOG_INFO] = "32", /* green */
-	[LOG_NOTICE] = "33", /* yellow */
-	[LOG_WARNING] = "35", /* magenta */
-	[LOG_ERROR] = "31", /* red */
-	[LOG_FATAL] = "1;31", /* bold red */
+	[CLOG_DEBUG] = "34", /* blue */
+	[CLOG_VERBOSE] = "36", /* cyan */
+	[CLOG_INFO] = "32", /* green */
+	[CLOG_NOTICE] = "33", /* yellow */
+	[CLOG_WARNING] = "35", /* magenta */
+	[CLOG_ERROR] = "31", /* red */
+	[CLOG_FATAL] = "1;31", /* bold red */
 };
 #define BEGIN_COLOR(lvl) fprintf(_logfile, "\x1b[%sm", _colorcodes[lvl])
 #define END_COLORS() fputs("\x1b[0m", _logfile)
@@ -61,47 +61,47 @@ static INLINE void _lock(bool i) {
 }
 
 
-void log_setlogfile(FILE *const f) {
+void clog_setlogfile(FILE *const f) {
 	_logfile = f;
 }
 
-FILE *log_getlogfile(void) {
+FILE *clog_getlogfile(void) {
 	return _logfile;
 }
 
-void log_setfilterlevel(const LogLevel lvl) {
+void clog_setfilterlevel(const LogLevel lvl) {
 	_filterlevel = lvl;
 }
 
-LogLevel log_getfilterlevel(void) {
+LogLevel clog_getfilterlevel(void) {
 	return _filterlevel;
 }
 
-const char *log_getfiltername(void) {
+const char *clog_getfiltername(void) {
 	return _levelnames[_filterlevel];
 }
 
-void log_setoutputattrs(const OutputAttribute a) {
+void clog_setoutputattrs(const OutputAttribute a) {
 	_outputattrs = a;
 }
 
-OutputAttribute log_getoutputattrs(void) {
+OutputAttribute clog_getoutputattrs(void) {
 	return _outputattrs;
 }
 
-void log_setlock(void (*const f)(void*)) {
+void clog_setlock(void (*const f)(void*)) {
 	_lockfuncs[DO_LOCK] = f;
 }
 
-void log_setunlock(void (*const f)(void*)) {
+void clog_setunlock(void (*const f)(void*)) {
 	_lockfuncs[DO_UNLOCK] = f;
 }
 
-void log_setlockuserdata(void *const u) {
+void clog_setlockuserdata(void *const u) {
 	_lockuserdata = u;
 }
 
-void *log_getlockuserdata(void) {
+void *clog_getlockuserdata(void) {
 	return _lockuserdata;
 }
 
@@ -134,20 +134,20 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		}
 
 		/* Message header */
-		if(_outputattrs & LOG_ATTR_COLORED)
+		if(_outputattrs & CLOG_ATTR_COLORED)
 			BEGIN_COLOR(lvl);
-		if(_outputattrs & LOG_ATTR_TIME)
+		if(_outputattrs & CLOG_ATTR_TIME)
 			_printtime();
-		if(_outputattrs & LOG_ATTR_FILE) {
+		if(_outputattrs & CLOG_ATTR_FILE) {
 			fprintf(_logfile, "%s:%u", file, line);
-			if(_outputattrs & LOG_ATTR_FUNC)
+			if(_outputattrs & CLOG_ATTR_FUNC)
 				fputc(',', _logfile);
 			fputc(' ', _logfile);
 		}
-		if(_outputattrs & LOG_ATTR_FUNC)
+		if(_outputattrs & CLOG_ATTR_FUNC)
 			fprintf(_logfile, "%s() ", func);
 		fprintf(_logfile, "%-7s -- ", _levelnames[lvl]);
-		if(_outputattrs & LOG_ATTR_COLORED)
+		if(_outputattrs & CLOG_ATTR_COLORED)
 			END_COLORS();
 
 		/* The mesage itself */

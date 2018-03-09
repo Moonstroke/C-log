@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "C / log"
+PROJECT_NAME           = "Clog"
 PROJECT_NUMBER         = 0.1
 PROJECT_BRIEF          = "A simple logging system in C"
 PROJECT_LOGO           =

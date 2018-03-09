@@ -1,4 +1,4 @@
-# C / log
+# Clog
 
 [![Build Status](https://travis-ci.org/Moonstroke/C-log.svg?branch=master)](
 https://travis-ci.org/Moonstroke/C-log)
@@ -6,7 +6,8 @@ https://travis-ci.org/Moonstroke/C-log)
 
 ## A simple logging system in C
 
-This project defines a simple message logging and sorting system in C.
+*Clog* is , beyond traditional dutch footwear, a simple logging system written
+in and for C.
 
 The project is designed to be lightweight, efficient and easy to use.
 The features are fully documented here and in the `log.h` file (in the `inc`
@@ -83,31 +84,31 @@ See further for an explanation about the colors.
 #### 2. *LogLevel* enumeration
 
 *LogLevel* is an `enum` declared with values named after the priority level
-names as in the previous table, prepended with `LOG_`. For example, the value
-corresponding to the *info* level is named exactly `LOG_INFO`.
+names as in the previous table, prepended with `CLOG_`. For example, the value
+corresponding to the *info* level is named exactly `CLOG_INFO`.
 
-Two supplementary values are defined, `LOG_FILTER_ALL` and `LOG_FILTER_NONE`,
+Two supplementary values are defined, `CLOG_FILTER_ALL` and `CLOG_FILTER_NONE`,
 that describe the minimum and maximum filtering levels (see after).
 
 
 #### 3. Filtering the logs
 
-The function `log_setfilterlevel(LogLevel)` allows to specify a priority level
+The function `clog_setfilterlevel(LogLevel)` allows to specify a priority level
 below which the messages will not be logged. (This is where the *LogLevel*
-values `LOG_FILTER_*` take all their meaning.)
+values `CLOG_FILTER_*` take all their meaning.)
 
-The initial filter level is set to `LOG_FILTER_ALL`, which means that all
+The initial filter level is set to `CLOG_FILTER_ALL`, which means that all
 messages are logged.
 
 The value of the log filter can be retrieved with the function
-`log_getfilterlevel()`.
+`clog_getfilterlevel()`.
 
 
 
 ### IV. Output attributes
 
 The enumeration *OutputAttribute* defines constants which represent an attribute
-to modify the display of a logged message. They are named `LOG_OUTPUT_<name>`,
+to modify the display of a logged message. They are named `CLOG_OUTPUT_<name>`,
 where `<name>` describes the effect ot the attribute:
 
  `<name>`|Attribute effect on the message header
@@ -124,5 +125,5 @@ output. This feature involves unprintable characters; although widely supported
 in terminal emulators, they may be misrepresented in text editors.
 
 Several attributes can be given simultaneously, by combining them with a bitwise
-`OR`. In fact, *OutputAttribute* defines a value, `LOG_ATTR_VERBOSE`, which
-combines the attributes `LOG_ATTR_TIME`, `FILE` and `FUNC`.
+`OR`. In fact, *OutputAttribute* defines a value, `CLOG_ATTR_VERBOSE`, which
+combines the attributes `CLOG_ATTR_TIME`, `FILE` and `FUNC`.

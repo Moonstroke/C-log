@@ -6,7 +6,7 @@
  * This file contains the definition of a simple logging system in C.
  *
  * Messages will be ouput on \a stderr by default, however the log file can be
- * overwritten using \a log_setlogfile.
+ * overwritten using \a clog_setlogfile.
  *
  * Each call to a logging function will output its message -- given as a
  * <i>printf</i>-like format string and parameters.
@@ -31,8 +31,8 @@
  *
  */
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef CLOG_H
+#define CLOG_H
 
 #include <stdarg.h> /* for va_* */
 #include <stdio.h> /* for FILE, fprintf, fputs */
@@ -71,36 +71,36 @@
  * log filter.
  *
  * The message is to be filtered out from logs if its priority level is
- * inferior to the one set in log_setfilter().
+ * inferior to the one set in clog_setfilter().
  * It will also be preceded in logs by a header, consisting of the name of the
  * level and two separating dashes, e.g.:
  * \verbatim INFO -- info message content \endverbatim
  */
 typedef enum {
-	LOG_DEBUG = 0,
+	CLOG_DEBUG = 0,
 	/**< A message used while developing, to help the programmer */
-	LOG_VERBOSE,
+	CLOG_VERBOSE,
 	/**< A detailled information message */
-	LOG_INFO,
+	CLOG_INFO,
 	/**< An information message */
-	LOG_NOTICE,
+	CLOG_NOTICE,
 	/**< An important information */
-	LOG_WARNING,
+	CLOG_WARNING,
 	/**< Indicates an unexpected state of the system */
-	LOG_ERROR,
+	CLOG_ERROR,
 	/**< Denotes a severe unexpected behavior which can lead to system
 	     failure */
-	LOG_FATAL,
+	CLOG_FATAL,
 	/**< Marks a non-recoverable error happened, and the system will exit
 	     immediately */
 
 	/* Those should not be used with log() as they are only aliases for the
 	minimum and maximum filtering levels. */
-	LOG_FILTER_ALL = LOG_DEBUG,
-	/**< The maximal allowance level in filter (alias to \a LOG_DEBUG) */
-	LOG_FILTER_NONE = LOG_FATAL
+	CLOG_FILTER_ALL = CLOG_DEBUG,
+	/**< The maximal allowance level in filter (alias to \a CLOG_DEBUG) */
+	CLOG_FILTER_NONE = CLOG_FATAL
 	/**< The most quiet level (only crash messages are output), alias to
-	     \a LOG_FATAL */
+	     \a CLOG_FATAL */
 } LogLevel;
 
 
@@ -111,30 +111,30 @@ typedef enum {
 	/**
 	 * \brief The message is output in plain text, with only the priority level.
 	 */
-	LOG_ATTR_MINIMAL = 0x0,
+	CLOG_ATTR_MINIMAL = 0x0,
 	/**
 	 * \brief The message header displays the logging time.
 	 */
-	LOG_ATTR_TIME = 0x1,
+	CLOG_ATTR_TIME = 0x1,
 	/**
 	 * \brief The message logs file name and line number info.
 	 */
-	LOG_ATTR_FILE = 0x2,
+	CLOG_ATTR_FILE = 0x2,
 	/**
 	 * \brief Logs the name of the function the message is logged within.
 	 */
-	LOG_ATTR_FUNC = 0x4,
+	CLOG_ATTR_FUNC = 0x4,
 	/**
 	 * \brief The message is output colored (using ANSI escape sequences).
 	 *
 	 * \note Only the header (level name and optionally verbose output info) is
 	 *       colored, the message itself is not.
 	 */
-	LOG_ATTR_COLORED = 0x10,
+	CLOG_ATTR_COLORED = 0x10,
 	/**
 	*  \brief The message is output with time, line, function and file info.
 	*/
-	LOG_ATTR_VERBOSE = LOG_ATTR_TIME | LOG_ATTR_FILE | LOG_ATTR_FUNC,
+	CLOG_ATTR_VERBOSE = CLOG_ATTR_TIME | CLOG_ATTR_FILE | CLOG_ATTR_FUNC,
 } OutputAttribute;
 
 
@@ -146,14 +146,14 @@ typedef enum {
  * \note If none is set (this function never gets called), messages will be
  * printed to \a stderr.
  */
-void log_setlogfile(FILE *logfile) NOTNULL(1);
+void clog_setlogfile(FILE *logfile) NOTNULL(1);
 
 /**
  * \brief Retrieve the log file.
  *
  * \return The file where messages are logged.
  */
-FILE *log_getlogfile(void) PURE;
+FILE *clog_getlogfile(void) PURE;
 
 /**
  * \brief Sets a priority level to filter log messages.
@@ -162,39 +162,39 @@ FILE *log_getlogfile(void) PURE;
  *
  * \param[in] filterlevel The logging level to filter messages
  */
-void log_setfilterlevel(LogLevel filterlevel);
+void clog_setfilterlevel(LogLevel filterlevel);
 
 /**
  * \brief Retrieves the filter level.
  *
  * \return The priority level of output filter.
  *
- * \sa log_getfiltername
+ * \sa clog_getfiltername
  */
-LogLevel log_getfilterlevel(void) PURE;
+LogLevel clog_getfilterlevel(void) PURE;
 
 /**
  * \brief Gets the name of the filter level.
  *
  * \return The name of the filtering level, in uppercase, e.g. \c "DEBUG".
  *
- * \sa log_getfilter
+ * \sa clog_getfilter
  */
-const char *log_getfiltername(void) PURE;
+const char *clog_getfiltername(void) PURE;
 
 /**
  * \brief Sets the output attributes.
  *
  * \param[in] attrs The OutputAttribute, or several \c OR -ed together
  */
-void log_setoutputattrs(OutputAttribute attrs);
+void clog_setoutputattrs(OutputAttribute attrs);
 
 /**
  * \brief Retrieves the output attributes.
  *
  * \return The \c OR sum of the log output attributes.
  */
-OutputAttribute log_getoutputattrs(void) PURE;
+OutputAttribute clog_getoutputattrs(void) PURE;
 
 /**
  * \brief Specifies a lock function to acquire thread lock.
@@ -205,28 +205,28 @@ OutputAttribute log_getoutputattrs(void) PURE;
  *
  * \param[in] lock The function to lock the thread
  */
-void log_setlock(void (*lock)(void*)) NOTNULL(1);
+void clog_setlock(void (*lock)(void*)) NOTNULL(1);
 
 /**
  * \brief Specifies the function to release the thread lock.
  *
  * \param[in] unlock The thread unlock function
  */
-void log_setunlock(void (*unlock)(void*)) NOTNULL(1);
+void clog_setunlock(void (*unlock)(void*)) NOTNULL(1);
 
 /**
  * \brief Gives the parameter to pass to the thread lock and unlock functions.
  *
  * \param[in] userdata The user data
  */
-void log_setlockuserdata(void *userdata);
+void clog_setlockuserdata(void *userdata);
 
 /**
  * \brief Retrieves the user pointer passed to the thread lock/unlock functions.
  *
  * \return The user data passed to lock funcs.
  */
-void *log_getlockuserdata(void) PURE;
+void *clog_getlockuserdata(void) PURE;
 
 /**
  * \brief Logs a message in the log file (on stderr if none was specified).
@@ -260,7 +260,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define debug(...) logmsg(__FILE__, __LINE__, __func__, LOG_DEBUG, __VA_ARGS__)
+#define debug(...) logmsg(__FILE__, __LINE__, __func__, CLOG_DEBUG, __VA_ARGS__)
 
 /**
  * \brief Logs a detailled information message.
@@ -269,7 +269,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define verbose(...) logmsg(__FILE__, __LINE__, __func__, LOG_VERBOSE, __VA_ARGS__)
+#define verbose(...) logmsg(__FILE__, __LINE__, __func__, CLOG_VERBOSE, __VA_ARGS__)
 
 /**
  * \brief Logs a basic information message.
@@ -278,7 +278,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define info(...) logmsg(__FILE__, __LINE__, __func__, LOG_INFO, __VA_ARGS__)
+#define info(...) logmsg(__FILE__, __LINE__, __func__, CLOG_INFO, __VA_ARGS__)
 
 /**
  * \brief Logs an information message that requires attention.
@@ -287,7 +287,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define notice(...) logmsg(__FILE__, __LINE__, __func__, LOG_NOTICE, __VA_ARGS__)
+#define notice(...) logmsg(__FILE__, __LINE__, __func__, CLOG_NOTICE, __VA_ARGS__)
 
 /**
  * \brief Logs a warning message.
@@ -296,7 +296,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define warning(...) logmsg(__FILE__, __LINE__, __func__, LOG_WARNING, __VA_ARGS__)
+#define warning(...) logmsg(__FILE__, __LINE__, __func__, CLOG_WARNING, __VA_ARGS__)
 
 /**
  * \brief Logs an error message.
@@ -305,7 +305,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define error(...) logmsg(__FILE__, __LINE__, __func__, LOG_ERROR, __VA_ARGS__)
+#define error(...) logmsg(__FILE__, __LINE__, __func__, CLOG_ERROR, __VA_ARGS__)
 
 /**
  * \brief Logs a fatal error message.
@@ -316,7 +316,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define fatal(...) logmsg(__FILE__, __LINE__, __func__, LOG_FATAL, __VA_ARGS__)
+#define fatal(...) logmsg(__FILE__, __LINE__, __func__, CLOG_FATAL, __VA_ARGS__)
 
 
 /**
@@ -339,4 +339,4 @@ void vlogmsg(const char *file, unsigned int line, const char *func,
              LogLevel level, const char *fmt, va_list args) PRINTF(5, 0);
 
 
-#endif /* LOG_H */
+#endif /* CLOG_H */
