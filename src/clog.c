@@ -1,4 +1,4 @@
-#include "log.h"
+#include "clog.h"
 
 #include <ctype.h> /* for isspace */
 #include <time.h> /* for time_t, localtime, strftime */
