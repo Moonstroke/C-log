@@ -96,7 +96,12 @@ where `<name>` describes the effect ot the attribute:
   `TIME` |Contains the time (in format `hh:mm:ss`) of the logging
   `FILE` |Contains the name of the file and the line number of the function call
   `FUNC` |Contains the name of the function the call was made from
-`COLORED`|The header is colored with the color assocatied with the level (*cf.* Summary table)
+`COLORED`|The header is colored with the color associated with the level (*cf.* Summary table)
+
+**Warning:** Clog uses
+[ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code) to color the
+output. This feature involves unprintable characters; although widely supported
+in terminal emulators, they may be misrepresented in text editors.
 
 Several attributes can be given simultaneously, by combining them with a bitwise
 `OR`. In fact, *OutputAttribute* defines a value, `LOG_ATTR_VERBOSE`, which
