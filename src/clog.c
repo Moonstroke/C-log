@@ -42,7 +42,7 @@ static void (*_lockfuncs[2])(void*) = {
 static void *_lockuserdata = NULL;
 
 
-static INLINE PURE bool _msgblank(const char *msg) {
+static INLINE PURE NOTNULL(1) bool _msgblank(const char *msg) {
 	while(isspace(*msg)) ++msg;
 	return !*msg;
 }

@@ -251,7 +251,7 @@ void *clog_getlockuserdata(void) PURE;
  * \sa error
  */
 void logmsg(const char *file, unsigned int line, const char *func,
-            LogLevel level, const char *fmt, ...) PRINTF(5, 6);
+            LogLevel level, const char *fmt, ...) PRINTF(5, 6) NOTNULL(1, 3, 5);
 
 /**
  * \brief Logs a debugging message.
