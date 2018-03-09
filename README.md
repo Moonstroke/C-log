@@ -8,6 +8,26 @@ https://travis-ci.org/Moonstroke/C-log)
 
 This project defines a simple message logging and sorting system in C.
 
+The project is designed to be lightweight, efficient and easy to use.
+The features are fully documented here and in the `log.h` file (in the `inc`
+directory) in [Doxygen](doxygen.org) format; in fact, the only files you really
+need are `log.h`, and `log.c`, in the `src` directory!
+
+In the same vein as [Log4j](https://logging.apache.org/log4j/2.x/),
+[Syslog](https://en.wikipedia.org/wiki/Syslog), etc., the system hierarchizes
+the logs in priority levels, here at the number of seven: three in an *error*
+category, three in an *info* category, and a debugging level.
+These levels, and the associated functions, allow to order and filter the output
+easily.
+
+A number of output attributes allow to specify context information for the
+message (file name, line number, function name) or to enhance the output
+(colors!).
+
+A couple of functions allow to specify user-defined functions to acquire and
+release a thread lock; the system is thus safe to use in a multithreaded
+environment (where the log destination could be accessed concurrently).
+
 **Sumary table**
 
 |Priority level|  Color |Priority description
