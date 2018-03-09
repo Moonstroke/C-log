@@ -1,5 +1,5 @@
 /**
- * \file log.h
+ * \file clog.h
  * \author joH1
  * \version 0.1
  *
