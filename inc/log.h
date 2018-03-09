@@ -111,30 +111,30 @@ typedef enum {
 	/**
 	 * \brief The message is output in plain text, with only the priority level.
 	 */
-	LOG_OUTPUT_MINIMAL = 0x0,
+	LOG_ATTR_MINIMAL = 0x0,
 	/**
 	 * \brief The message header displays the logging time.
 	 */
-	LOG_OUTPUT_TIME = 0x1,
+	LOG_ATTR_TIME = 0x1,
 	/**
 	 * \brief The message logs file name and line number info.
 	 */
-	LOG_OUTPUT_FILE = 0x2,
+	LOG_ATTR_FILE = 0x2,
 	/**
 	 * \brief Logs the name of the function the message is logged within.
 	 */
-	LOG_OUTPUT_FUNC = 0x4,
+	LOG_ATTR_FUNC = 0x4,
 	/**
 	 * \brief The message is output colored (using ANSI escape sequences).
 	 *
 	 * \note Only the header (level name and optionally verbose output info) is
 	 *       colored, the message itself is not.
 	 */
-	LOG_OUTPUT_COLORED = 0x10,
+	LOG_ATTR_COLORED = 0x10,
 	/**
 	*  \brief The message is output with time, line, function and file info.
 	*/
-	LOG_OUTPUT_VERBOSE = LOG_OUTPUT_TIME | LOG_OUTPUT_FILE | LOG_OUTPUT_FUNC,
+	LOG_ATTR_VERBOSE = LOG_ATTR_TIME | LOG_ATTR_FILE | LOG_ATTR_FUNC,
 } OutputAttribute;
 
 

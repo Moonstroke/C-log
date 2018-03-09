@@ -99,5 +99,5 @@ where `<name>` describes the effect ot the attribute:
 `COLORED`|The header is colored with the color assocatied with the level (*cf.* Summary table)
 
 Several attributes can be given simultaneously, by combining them with a bitwise
-`OR`. In fact, *OutputAttribute* defines a value, `LOG_OUTPUT_VERBOSE`, which
-combines the attributes `LOG_OUTPUT_TIME`, `FILE` and `FUNC`.
+`OR`. In fact, *OutputAttribute* defines a value, `LOG_ATTR_VERBOSE`, which
+combines the attributes `LOG_ATTR_TIME`, `FILE` and `FUNC`.

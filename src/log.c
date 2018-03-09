@@ -19,7 +19,7 @@ static const char *const _levelnames[] = {
 		[LOG_FATAL] = "FATAL"
 };
 
-static OutputAttribute _outputattrs = LOG_OUTPUT_MINIMAL;
+static OutputAttribute _outputattrs = LOG_ATTR_MINIMAL;
 
 static const char *const _colorcodes[] = {
 	[LOG_DEBUG] = "34", /* blue */
@@ -134,20 +134,20 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		}
 
 		/* Message header */
-		if(_outputattrs & LOG_OUTPUT_COLORED)
+		if(_outputattrs & LOG_ATTR_COLORED)
 			BEGIN_COLOR(lvl);
-		if(_outputattrs & LOG_OUTPUT_TIME)
+		if(_outputattrs & LOG_ATTR_TIME)
 			_printtime();
-		if(_outputattrs & LOG_OUTPUT_FILE) {
+		if(_outputattrs & LOG_ATTR_FILE) {
 			fprintf(_logfile, "%s:%u", file, line);
-			if(_outputattrs & LOG_OUTPUT_FUNC)
+			if(_outputattrs & LOG_ATTR_FUNC)
 				fputc(',', _logfile);
 			fputc(' ', _logfile);
 		}
-		if(_outputattrs & LOG_OUTPUT_FUNC)
+		if(_outputattrs & LOG_ATTR_FUNC)
 			fprintf(_logfile, "%s() ", func);
 		fprintf(_logfile, "%-7s -- ", _levelnames[lvl]);
-		if(_outputattrs & LOG_OUTPUT_COLORED)
+		if(_outputattrs & LOG_ATTR_COLORED)
 			END_COLORS();
 
 		/* The mesage itself */
