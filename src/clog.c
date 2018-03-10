@@ -1,13 +1,12 @@
 #include "clog.h"
 
-#include <ctype.h> /* for isspace */
 #include <time.h> /* for time_t, localtime, strftime */
-#include <stdbool.h>
 
 
 
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
+
 static LogLevel _filterlevel = CLOG_FILTER_ALL;
 static const char *const _levelnames[] = {
 		[CLOG_DEBUG] = "DEBUG",
@@ -33,8 +32,8 @@ static const char *const _colorcodes[] = {
 #define BEGIN_COLOR(lvl) fprintf(_logfile, "\x1b[%sm", _colorcodes[lvl])
 #define END_COLORS() fputs("\x1b[0m", _logfile)
 
-#define DO_LOCK true
-#define DO_UNLOCK false
+#define DO_LOCK 1
+#define DO_UNLOCK 0
 static void (*_lockfuncs[2])(void*) = {
 	[DO_LOCK] = NULL,
 	[DO_UNLOCK] = NULL
@@ -42,8 +41,12 @@ static void (*_lockfuncs[2])(void*) = {
 static void *_lockuserdata = NULL;
 
 
-static INLINE PURE NOTNULL(1) bool _msgblank(const char *msg) {
-	while(isspace(*msg)) ++msg;
+static INLINE PURE int _is_space(const char c) {
+	return ('\t' <= c && c <= '\r') || c == ' ';
+}
+
+static INLINE PURE NOTNULL(1) int _msgblank(const char *msg) {
+	while(_is_space(*msg)) ++msg;
 	return !*msg;
 }
 
@@ -55,7 +58,7 @@ static INLINE void _printtime(void) {
 	fputs(s, _logfile);
 }
 
-static INLINE void _lock(bool i) {
+static INLINE void _lock(int i) {
 	if(_lockfuncs[i])
 		_lockfuncs[i](_lockuserdata);
 }
@@ -116,16 +119,17 @@ void logmsg(const char *const file, const unsigned int line, const char *const f
 void vlogmsg(const char *const file, const unsigned int line, const char *const func,
              const LogLevel lvl, const char *fmt, va_list args) {
 	/* acquire thread lock */
-	_lock(true);
+	_lock(DO_LOCK);
 
 	if(_logfile == NULL) {
 		/* _logfile has not yet been initialized, we do it now */
 		_logfile = stderr;
 	}
+
 	if(_filterlevel <= lvl) {
 		if(_msgblank(fmt)) {
 			fputs(fmt, _logfile);
-			_lock(false);
+			_lock(DO_UNLOCK);
 			return;
 		}
 		if(*fmt == '\n') {
@@ -155,6 +159,6 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 		fprintf(_logfile, "\n");
 
 		/* release thread lock */
-		_lock(false);
+		_lock(DO_UNLOCK);
 	}
 }
