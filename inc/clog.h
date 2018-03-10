@@ -37,7 +37,10 @@
 #include <stdarg.h> /* for va_* */
 #include <stdio.h> /* for FILE, fprintf, fputs */
 
-/* ## FUNCTION ATTRIBUTES ## */
+/**
+ * \name GNU C function attributes
+ * \{
+ */
 
 #ifndef __GNUC__
 # define __attribute__(x) /**< \brief Empty definition for ISO C. */
@@ -65,6 +68,12 @@
  */
 #define PRINTF(fmt, arg1) __attribute__((__format__(printf, fmt, arg1)))
 
+
+/**
+ * \}
+ * \name Enumerations
+ * \{
+ */
 
 /**
  * \brief Defines the level of priority of a logging message, or an alias for a
@@ -110,7 +119,6 @@ typedef enum {
 	CLOG_FILTER_NONE = CLOG_FATAL
 } LogLevel;
 
-
 /**
  * \brief Defines attributes to modify the aspect of the logging output.
  */
@@ -151,6 +159,12 @@ typedef enum {
 
 
 /**
+ * \}
+ * \name Settings functions
+ * \{
+ */
+
+/**
  * \brief Specifies the file to log messages in.
  *
  * \param[in] logfile The file where to log messages, or \c NULL for \a stderr
@@ -166,6 +180,7 @@ void clog_setlogfile(FILE *logfile) NOTNULL(1);
  * \return The file where messages are logged.
  */
 FILE *clog_getlogfile(void) PURE;
+
 
 /**
  * \brief Sets a priority level to filter log messages.
@@ -194,6 +209,7 @@ LogLevel clog_getfilterlevel(void) PURE;
  */
 const char *clog_getfiltername(void) PURE;
 
+
 /**
  * \brief Sets the output attributes.
  *
@@ -207,6 +223,7 @@ void clog_setoutputattrs(OutputAttribute attrs);
  * \return The \c OR sum of the log output attributes.
  */
 OutputAttribute clog_getoutputattrs(void) PURE;
+
 
 /**
  * \brief Specifies a lock function to acquire thread lock.
@@ -233,12 +250,20 @@ void clog_setunlock(void (*unlock)(void*)) NOTNULL(1);
  */
 void clog_setlockuserdata(void *userdata);
 
+
 /**
  * \brief Retrieves the user pointer passed to the thread lock/unlock functions.
  *
  * \return The user data passed to lock funcs.
  */
 void *clog_getlockuserdata(void) PURE;
+
+
+/**
+ * \}
+ * \name Log functions and macros
+ * \{
+ */
 
 /**
  * \brief Logs a message in the log file (on stderr if none was specified).
@@ -350,5 +375,7 @@ void logmsg(const char *file, unsigned int line, const char *func,
 void vlogmsg(const char *file, unsigned int line, const char *func,
              LogLevel level, const char *fmt, va_list args) PRINTF(5, 0);
 
+
+/** \} */
 
 #endif /* CLOG_H */
