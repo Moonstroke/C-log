@@ -122,7 +122,7 @@ typedef enum {
 	CLOG_FILTER_ALL = CLOG_DEBUG,
 
 	/** \brief The most quiet level, only crash messages are output; alias of
-	 *     \a CLOG_FATAL. */
+	 *         \a CLOG_FATAL. */
 	CLOG_FILTER_NONE = CLOG_FATAL
 } LogLevel;
 
@@ -153,8 +153,8 @@ typedef enum {
 	/**
 	 * \brief The message is output colored (using ANSI escape sequences).
 	 *
-	 * \note Only the header (level name and optionally verbose output info) is
-	 *       colored, the message itself is not.
+	 * \attention Only the header (ie. the level name and optionally verbose
+	 *            output info) is colored, the message itself is not.
 	 */
 	CLOG_ATTR_COLORED = 0x10,
 
