@@ -164,6 +164,28 @@ typedef enum {
 	CLOG_ATTR_VERBOSE = CLOG_ATTR_TIME | CLOG_ATTR_FILE | CLOG_ATTR_FUNC
 } OutputAttribute;
 
+/**
+ * \brief Represents the format in which the messages should be logged.
+ */
+typedef enum {
+	/**
+	 * \brief Simple text format.
+	 */
+	CLOG_FORMAT_TEXT = 0,
+
+	/**
+	 * \brief Log messages in XML.
+	 *
+	 * \note See the file \c clog.dtd for the document type declaration.
+	 */
+	CLOG_FORMAT_XML,
+
+	/**
+	 * \brief Log messages in comma-separated values (table).
+	 */
+	CLOG_FORMAT_CSV
+} OutputFormat;
+
 
 /**
  * \}
@@ -230,6 +252,21 @@ void clog_setoutputattrs(OutputAttribute attrs);
  * \return The \c OR sum of the log output attributes.
  */
 OutputAttribute clog_getoutputattrs(void) PURE;
+
+
+/**
+ * \brief Specifies which format should messages be logged in.
+ *
+ * \param[in] format The output format
+ */
+void clog_setoutputformat(OutputFormat format);
+
+/**
+ * \brief Retrieves the format used to log messages.
+ *
+ * \return The log output format.
+ */
+OutputFormat clog_getoutputformat(void) PURE;
 
 
 /**
