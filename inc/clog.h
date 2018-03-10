@@ -77,30 +77,37 @@
  * \verbatim INFO -- info message content \endverbatim
  */
 typedef enum {
+	/** \brief A message used while developing, to help the programmer. */
 	CLOG_DEBUG = 0,
-	/**< A message used while developing, to help the programmer */
+
+	/** \brief A detailled information message. */
 	CLOG_VERBOSE,
-	/**< A detailled information message */
+
+	/** An information message. */
 	CLOG_INFO,
-	/**< An information message */
+
+	/** \brief An important information. */
 	CLOG_NOTICE,
-	/**< An important information */
+
+	/** \brief Indicates an unexpected state of the system. */
 	CLOG_WARNING,
-	/**< Indicates an unexpected state of the system */
+
+	/** \brief Denotes a severe unexpected behavior which can lead to system
+	 *         failure. */
 	CLOG_ERROR,
-	/**< Denotes a severe unexpected behavior which can lead to system
-	     failure */
+
+	/** \brief Marks a non-recoverable error happened, and the system will exit
+	 *         immediately. */
 	CLOG_FATAL,
-	/**< Marks a non-recoverable error happened, and the system will exit
-	     immediately */
 
 	/* Those should not be used with log() as they are only aliases for the
-	minimum and maximum filtering levels. */
+	   minimum and maximum filtering levels. */
+	/** \brief The maximal allowance filter level (alias of \a CLOG_DEBUG). */
 	CLOG_FILTER_ALL = CLOG_DEBUG,
-	/**< The maximal allowance level in filter (alias to \a CLOG_DEBUG) */
+
+	/** \brief The most quiet level, only crash messages are output; alias of
+	 *     \a CLOG_FATAL. */
 	CLOG_FILTER_NONE = CLOG_FATAL
-	/**< The most quiet level (only crash messages are output), alias to
-	     \a CLOG_FATAL */
 } LogLevel;
 
 
@@ -112,18 +119,22 @@ typedef enum {
 	 * \brief The message is output in plain text, with only the priority level.
 	 */
 	CLOG_ATTR_MINIMAL = 0x0,
+
 	/**
 	 * \brief The message header displays the logging time.
 	 */
 	CLOG_ATTR_TIME = 0x1,
+
 	/**
 	 * \brief The message logs file name and line number info.
 	 */
 	CLOG_ATTR_FILE = 0x2,
+
 	/**
 	 * \brief Logs the name of the function the message is logged within.
 	 */
 	CLOG_ATTR_FUNC = 0x4,
+
 	/**
 	 * \brief The message is output colored (using ANSI escape sequences).
 	 *
@@ -131,10 +142,11 @@ typedef enum {
 	 *       colored, the message itself is not.
 	 */
 	CLOG_ATTR_COLORED = 0x10,
+
 	/**
 	*  \brief The message is output with time, line, function and file info.
 	*/
-	CLOG_ATTR_VERBOSE = CLOG_ATTR_TIME | CLOG_ATTR_FILE | CLOG_ATTR_FUNC,
+	CLOG_ATTR_VERBOSE = CLOG_ATTR_TIME | CLOG_ATTR_FILE | CLOG_ATTR_FUNC
 } OutputAttribute;
 
 
