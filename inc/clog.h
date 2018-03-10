@@ -43,7 +43,14 @@
  */
 
 #ifndef __GNUC__
-# define __attribute__(x) /**< \brief Empty definition for ISO C. */
+/**
+ * \brief Empty definition for ISO C.
+ *
+ * If the project is compiled following the ISO C standard, this GCC syntax
+ * feature is defined empty to not hinder functions declarations; in that case
+ * it only serves as a hint for the reader.
+ */
+# define __attribute__(x)
 #endif
 
 /**
