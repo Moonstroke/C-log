@@ -4,8 +4,18 @@
 
 
 
+static InitMode _initmode = CLOG_INIT_TRUNCATE;
+static const char *_modes[] = {
+	[CLOG_INIT_TRUNCATE] = "w",
+	[CLOG_INIT_APPEND] = "a"
+};
+
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
+
+static OutputFormat _outputfmt = CLOG_FORMAT_TEXT;
+
+static OutputAttribute _outputattrs = CLOG_ATTR_MINIMAL;
 
 static LogLevel _filterlevel = CLOG_FILTER_ALL;
 static const char *const _levelnames[] = {
@@ -17,8 +27,6 @@ static const char *const _levelnames[] = {
 		[CLOG_ERROR] = "ERROR",
 		[CLOG_FATAL] = "FATAL"
 };
-
-static OutputAttribute _outputattrs = CLOG_ATTR_MINIMAL;
 
 static const char *const _colorcodes[] = {
 	[CLOG_DEBUG] = "34", /* blue */
@@ -32,6 +40,20 @@ static const char *const _colorcodes[] = {
 #define BEGIN_COLOR(lvl) fprintf(_logfile, "\x1b[%sm", _colorcodes[lvl])
 #define END_COLORS() fputs("\x1b[0m", _logfile)
 
+static void _vlogmsg_text(const char*, unsigned int, const char*, LogLevel,
+                          const char*, va_list);
+static void _vlogmsg_xml(const char*, unsigned int, const char*, LogLevel, const
+                         char*, va_list);
+static void _vlogmsg_csv(const char*, unsigned int, const char*, LogLevel, const
+                         char*, va_list);
+static void (*_outputfuncs[])(const char*, unsigned int, const char*, LogLevel,
+                              const char*, va_list) = {
+	[CLOG_FORMAT_TEXT] = _vlogmsg_text,
+	[CLOG_FORMAT_XML] = _vlogmsg_xml,
+	[CLOG_FORMAT_CSV] = _vlogmsg_csv
+};
+
+
 #define DO_LOCK 1
 #define DO_UNLOCK 0
 static void (*_lockfuncs[2])(void*) = {
@@ -40,6 +62,19 @@ static void (*_lockfuncs[2])(void*) = {
 };
 static void *_lockuserdata = NULL;
 
+
+static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
+                         fmt, const OutputAttribute a) {
+	if(m == CLOG_INIT_APPEND && fmt == CLOG_FORMAT_XML)
+		return false;
+	_logfile = f;
+	_initmode = m;
+	if((_outputfmt = fmt) == CLOG_FORMAT_XML) {
+		/* TODO init XML markup */
+	}
+	_outputattrs = a;
+	return true;
+}
 
 static INLINE PURE int _is_space(const char c) {
 	return ('\t' <= c && c <= '\r') || c == ' ';
@@ -50,12 +85,10 @@ static INLINE PURE NOTNULL(1) int _msgblank(const char *msg) {
 	return !*msg;
 }
 
-static INLINE void _printtime(void) {
+static INLINE void _printtime(char s[8]) {
 	time_t t;
-	char s[12];
 	time(&t);
-	strftime(s, 12, "[%H:%M:%S] ", localtime(&t));
-	fputs(s, _logfile);
+	strftime(s, 8, "%H:%M:%S", localtime(&t));
 }
 
 static INLINE void _lock(int i) {
@@ -64,9 +97,23 @@ static INLINE void _lock(int i) {
 }
 
 
-void clog_setlogfile(FILE *const f) {
-	_logfile = f;
+bool clog_init_file(const char *const s, const InitMode m, const OutputFormat
+                    fmt, const OutputAttribute a) {
+	FILE *const f = fopen(s, _modes[m]);
+	return (f != NULL) && _init(f, m, fmt, a);
 }
+
+bool clog_init(const OutputFormat fmt, const OutputAttribute a) {
+	return _init(stderr, CLOG_INIT_TRUNCATE, fmt, a);
+}
+
+void clog_term(void) {
+	if(_outputfmt == CLOG_FORMAT_XML) {
+		/* TODO close XML markup */
+	}
+	fclose(_logfile);
+}
+
 
 FILE *clog_getlogfile(void) {
 	return _logfile;
@@ -82,10 +129,6 @@ LogLevel clog_getfilterlevel(void) {
 
 const char *clog_getfiltername(void) {
 	return _levelnames[_filterlevel];
-}
-
-void clog_setoutputattrs(const OutputAttribute a) {
-	_outputattrs = a;
 }
 
 OutputAttribute clog_getoutputattrs(void) {
@@ -137,28 +180,85 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 			++fmt; /* omit the new line from the message */
 		}
 
-		/* Message header */
-		if(_outputattrs & CLOG_ATTR_COLORED)
-			BEGIN_COLOR(lvl);
-		if(_outputattrs & CLOG_ATTR_TIME)
-			_printtime();
-		if(_outputattrs & CLOG_ATTR_FILE) {
-			fprintf(_logfile, "%s:%u", file, line);
-			if(_outputattrs & CLOG_ATTR_FUNC)
-				fputc(',', _logfile);
-			fputc(' ', _logfile);
-		}
-		if(_outputattrs & CLOG_ATTR_FUNC)
-			fprintf(_logfile, "%s() ", func);
-		fprintf(_logfile, "%-7s -- ", _levelnames[lvl]);
-		if(_outputattrs & CLOG_ATTR_COLORED)
-			END_COLORS();
-
-		/* The mesage itself */
-		vfprintf(_logfile, fmt, args);
-		fprintf(_logfile, "\n");
+		_outputfuncs[_outputfmt](file, line, func, lvl, fmt, args);
 
 		/* release thread lock */
 		_lock(DO_UNLOCK);
 	}
+}
+
+
+static void _vlogmsg_text(const char *const file, const unsigned int line, const
+                          char *const func, const LogLevel lvl, const char
+                          *const fmt, va_list args) {
+	/* Message header */
+	if(_outputattrs & CLOG_ATTR_COLORED)
+		BEGIN_COLOR(lvl);
+	if(_outputattrs & CLOG_ATTR_TIME) {
+		char tstr[8];
+		_printtime(tstr);
+		fprintf(_logfile, "[%s] ", tstr);
+	}
+	if(_outputattrs & CLOG_ATTR_FILE) {
+		fprintf(_logfile, "%s:%u", file, line);
+		if(_outputattrs & CLOG_ATTR_FUNC)
+			fputc(',', _logfile);
+		fputc(' ', _logfile);
+	}
+	if(_outputattrs & CLOG_ATTR_FUNC)
+		fprintf(_logfile, "%s() ", func);
+	fprintf(_logfile, "%-7s -- ", _levelnames[lvl]);
+	if(_outputattrs & CLOG_ATTR_COLORED)
+		END_COLORS();
+
+	/* The mesage itself */
+	vfprintf(_logfile, fmt, args);
+	fprintf(_logfile, "\n");
+}
+
+static void _vlogmsg_xml(const char *const file, const unsigned int line, const
+                         char *const func, const LogLevel lvl, const char
+                         *const fmt, va_list args) {
+	/*
+		<message time="time" file-name="file" file-line="line" func-name="func" level="lvl">
+			msg
+		</message>
+	*/
+	fputs("\t<message ", _logfile);
+	if(_outputattrs & CLOG_ATTR_TIME) {
+		char tstr[8];
+		_printtime(tstr);
+		fprintf(_logfile, "time=\"%s\" ", tstr);
+	}
+	if(_outputattrs & CLOG_ATTR_FILE)
+		fprintf(_logfile, "file-name=\"%s\" file-line=\"%u\" ", file, line);
+	if(_outputattrs & CLOG_ATTR_FUNC)
+		fprintf(_logfile, "func-name=\"%s\" ", func);
+	fprintf(_logfile, "\"%s\">", _levelnames[lvl]);
+
+	/* The mesage itself */
+	vfprintf(_logfile, fmt, args);
+	fprintf(_logfile, "</message>\n");
+}
+
+static void _vlogmsg_csv(const char *const file, const unsigned int line, const
+                         char *const func, const LogLevel lvl, const char
+                         *const fmt, va_list args) {
+	/*
+	time	file	line	func	level	msg
+	*/
+	if(_outputattrs & CLOG_ATTR_TIME) {
+		char tstr[8];
+		_printtime(tstr);
+		fprintf(_logfile, "%s\t", tstr);
+	}
+	if(_outputattrs & CLOG_ATTR_FILE)
+		fprintf(_logfile, "%s\t%u\t", file, line);
+	if(_outputattrs & CLOG_ATTR_FUNC)
+		fprintf(_logfile, "%s\t", func);
+	fprintf(_logfile, "%s\t", _levelnames[lvl]);
+
+	/* The mesage itself */
+	vfprintf(_logfile, fmt, args);
+	fprintf(_logfile, "\n");
 }

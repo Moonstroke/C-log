@@ -11,23 +11,13 @@ int main(void) {
 
 	const char *const fname = "test.log";
 
-	FILE *const test_log_file = fopen(fname, "w");
-
 	const LogLevel lvl = CLOG_DEBUG;
 	const char *const lname = "DEBUG";
 
 	const char *const msg = "Test message log";
 	const char *const msg_blank = "\t\n\v\f\r ";
 
-	if(test_log_file == NULL) { /* just in case */
-		fprintf(stderr, "Unable to create file \"%s\"\n", fname);
-		fprintf(stderr, "Check your permissions in the current directory\n");
-		return -1;
-	}
-
-	testlog("test clog_setlogfile(FILE<\"%s\">)\n", fname);
-	clog_setlogfile(test_log_file);
-	testlog("OK\n\n");
+	clog_init_file(fname, CLOG_INIT_TRUNCATE, CLOG_FORMAT_TEXT, CLOG_ATTR_MINIMAL);
 
 	testlog("test clog_setfilter(%d)\n", lvl);
 	clog_setfilterlevel(lvl);
@@ -52,6 +42,6 @@ int main(void) {
 
 	testlog("end tests\n");
 
-	fclose(test_log_file);
+	clog_term();
 	return 0;
 }
