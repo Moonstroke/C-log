@@ -239,7 +239,7 @@ void clog_term(void);
 
 /**
  * \}
- * \name Settings functions
+ * \name Log settings functions
  * \{
  */
 
