@@ -59,7 +59,7 @@ static void (*_outputfuncs[])(const char*, unsigned int, const char*, LogLevel,
 
 #define DO_LOCK 1
 #define DO_UNLOCK 0
-static void (*_lockfuncs[2])(void*) = {
+static void (*_lockfuncs[])(void*) = {
 	[DO_LOCK] = NULL,
 	[DO_UNLOCK] = NULL
 };
