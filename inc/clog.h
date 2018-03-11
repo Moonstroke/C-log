@@ -190,6 +190,9 @@ typedef enum {
 	 * \brief Log messages in XML.
 	 *
 	 * \note See the file \c clog.dtd for the document type declaration.
+	 *
+	 * \attention This format cannot be used in conjunction with the
+	 *            \a CLOG_INIT_APPEND init mode.
 	 */
 	CLOG_FORMAT_XML,
 
