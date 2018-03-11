@@ -4,6 +4,9 @@
 
 
 
+#define INLINE __attribute__((__always_inline__)) inline
+
+
 static InitMode _initmode = CLOG_INIT_TRUNCATE;
 static const char *_modes[] = {
 	[CLOG_INIT_TRUNCATE] = "w",
