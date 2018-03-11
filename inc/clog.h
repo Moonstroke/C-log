@@ -36,7 +36,7 @@
 
 #include <stdarg.h> /* for va_* */
 #include <stdbool.h>
-#include <stdio.h> /* for FILE, fprintf, fputs */
+#include <stdio.h> /* for FILE, fopen, fprintf, fputs */
 
 /**
  * \name GNU C function attributes
