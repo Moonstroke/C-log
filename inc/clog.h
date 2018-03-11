@@ -106,7 +106,7 @@ typedef enum {
  */
 typedef enum {
 	/** \brief A message used while developing, to help the programmer. */
-	CLOG_DEBUG = 0,
+	CLOG_DEBUG,
 
 	/** \brief A detailled information message. */
 	CLOG_VERBOSE,
@@ -183,7 +183,7 @@ typedef enum {
 	/**
 	 * \brief Simple text format.
 	 */
-	CLOG_FORMAT_TEXT = 0,
+	CLOG_FORMAT_TEXT,
 
 	/**
 	 * \brief Log messages in XML.
