@@ -35,6 +35,7 @@
 #define CLOG_H
 
 #include <stdarg.h> /* for va_* */
+#include <stdbool.h>
 #include <stdio.h> /* for FILE, fprintf, fputs */
 
 /**
@@ -81,6 +82,18 @@
  * \name Enumerations
  * \{
  */
+
+/**
+ * \brief Initialization modes for the log file.
+ */
+typedef enum {
+
+	/** \brief Opens the file and reset its content. */
+	CLOG_INIT_TRUNCATE,
+
+	/** \brief Appends the content at the end of the file. */
+	CLOG_INIT_APPEND
+} InitMode;
 
 /**
  * \brief Defines the level of priority of a logging message, or an alias for a
@@ -189,19 +202,44 @@ typedef enum {
 
 /**
  * \}
- * \name Settings functions
+ * \name Initialization and termination functions
  * \{
  */
 
 /**
- * \brief Specifies the file to log messages in.
+ * \brief Initializes the log system to a file.
  *
- * \param[in] logfile The file where to log messages, or \c NULL for \a stderr
+ * \param[in] filename The path to the log file
+ * \param[in] mode     The opening mode of the file
+ * \param[in] format   The output format
+ * \param[in] attrs The OutputAttribute, or several \c OR -ed together
  *
- * \note If none is set (this function never gets called), messages will be
- * printed to \a stderr.
+ * \return \c true iff no error occured.
  */
-void clog_setlogfile(FILE *logfile) NOTNULL(1);
+bool clog_init_file(const char *filename, InitMode mode, OutputFormat format,
+                    OutputAttribute attrs);
+
+/**
+ * \brief Initializes the log system to \c stderr.
+ *
+ * \param[in] format   The output format
+ * \param[in] attrs The OutputAttribute, or several \c OR -ed together
+ *
+ * \return \c true iff no error occured.
+ */
+bool clog_init(OutputFormat format, OutputAttribute attrs);
+
+/**
+ * \brief Shuts down the log system.
+ */
+void clog_term(void);
+
+
+/**
+ * \}
+ * \name Settings functions
+ * \{
+ */
 
 /**
  * \brief Retrieve the log file.
@@ -240,26 +278,12 @@ const char *clog_getfiltername(void) PURE;
 
 
 /**
- * \brief Sets the output attributes.
- *
- * \param[in] attrs The OutputAttribute, or several \c OR -ed together
- */
-void clog_setoutputattrs(OutputAttribute attrs);
-
-/**
  * \brief Retrieves the output attributes.
  *
  * \return The \c OR sum of the log output attributes.
  */
 OutputAttribute clog_getoutputattrs(void) PURE;
 
-
-/**
- * \brief Specifies which format should messages be logged in.
- *
- * \param[in] format The output format
- */
-void clog_setoutputformat(OutputFormat format);
 
 /**
  * \brief Retrieves the format used to log messages.
