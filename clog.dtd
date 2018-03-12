@@ -1,0 +1,7 @@
+<!ELEMENT log (msg+)>
+<!ELEMENT msg (#PCDATA)>
+<!ATTLIST msg time CDATA #IMPLIED>
+<!ATTLIST msg file CDATA #IMPLIED>
+<!ATTLIST msg line CDATA #IMPLIED>
+<!ATTLIST msg func CDATA #IMPLIED>
+<!ATTLIST msg level CDATA #REQUIRED>
