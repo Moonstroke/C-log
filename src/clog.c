@@ -72,11 +72,23 @@ static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
 		return false;
 	_logfile = f;
 	_initmode = m;
-	if((_outputfmt = fmt) == CLOG_FORMAT_XML) {
-		fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n",
-		      _logfile);
-		fputs("<!DOCTYPE log SYSTEM \"clog.dtd\">", _logfile);
-		fputs("<log>\n", _logfile);
+	switch(_outputfmt = fmt) {
+		case CLOG_FORMAT_XML:
+			fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n",
+				  _logfile);
+			fputs("<!DOCTYPE log SYSTEM \"clog.dtd\">", _logfile);
+			fputs("<log>\n", _logfile);
+			break;
+		case CLOG_FORMAT_CSV:
+			if(a && CLOG_ATTR_TIME)
+				fputs("Time (hh:mm:ss)\t", _logfile);
+			if(a && CLOG_ATTR_FILE)
+				fputs("File name\tLine number\t", _logfile);
+			if(a && CLOG_ATTR_FUNC)
+				fputs("Function name\t", _logfile);
+			fputs("Level name\tMessage content\n", _logfile);
+			break;
+		default: break;
 	}
 	_outputattrs = a;
 	return true;
