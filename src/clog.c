@@ -103,10 +103,10 @@ static INLINE PURE NOTNULL(1) int _msgblank(const char *msg) {
 	return !*msg;
 }
 
-static INLINE void _printtime(char s[8]) {
+static INLINE void _printtime(char s[9]) {
 	time_t t;
 	time(&t);
-	strftime(s, 8, "%H:%M:%S", localtime(&t));
+	strftime(s, 9, "%H:%M:%S", localtime(&t));
 }
 
 static INLINE void _lock(int i) {
@@ -213,7 +213,7 @@ static void _vlogmsg_text(const char *const file, const unsigned int line, const
 	if(_outputattrs & CLOG_ATTR_COLORED)
 		BEGIN_COLOR(lvl);
 	if(_outputattrs & CLOG_ATTR_TIME) {
-		char tstr[8];
+		char tstr[9];
 		_printtime(tstr);
 		fprintf(_logfile, "[%s] ", tstr);
 	}
@@ -244,7 +244,7 @@ static void _vlogmsg_xml(const char *const file, const unsigned int line, const
 	*/
 	fputs("\t<message ", _logfile);
 	if(_outputattrs & CLOG_ATTR_TIME) {
-		char tstr[8];
+		char tstr[9];
 		_printtime(tstr);
 		fprintf(_logfile, "time=\"%s\" ", tstr);
 	}
@@ -266,7 +266,7 @@ static void _vlogmsg_csv(const char *const file, const unsigned int line, const
 	time	file	line	func	level	msg
 	*/
 	if(_outputattrs & CLOG_ATTR_TIME) {
-		char tstr[8];
+		char tstr[9];
 		_printtime(tstr);
 		fprintf(_logfile, "%s\t", tstr);
 	}
