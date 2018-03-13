@@ -224,7 +224,9 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 static void _vlogmsg_text(const char *const file, const unsigned int line, const
                           char *const func, const LogLevel lvl, const char
                           *const fmt, va_list args) {
-	/* Message header */
+	/*
+	[15:36:23] myfile.c:42, main() WARNING -- There is a bug!
+	*/
 	if(_outputattrs & CLOG_ATTR_COLORED)
 		BEGIN_COLOR(lvl);
 	if(_outputattrs & CLOG_ATTR_TIME) {
@@ -253,9 +255,11 @@ static void _vlogmsg_xml(const char *const file, const unsigned int line, const
                          char *const func, const LogLevel lvl, const char
                          *const fmt, va_list args) {
 	/*
-		<message time="time" file-name="file" file-line="line" func-name="func" level="lvl">
-			msg
+	<log>
+		<message time="15:36:23" file="myfile.c" line="42" func="main" level="WARNING">
+		There is a bug!
 		</message>
+	</log>
 	*/
 	fputs("\t<message ", _logfile);
 	if(_outputattrs & CLOG_ATTR_TIME) {
@@ -278,7 +282,8 @@ static void _vlogmsg_csv(const char *const file, const unsigned int line, const
                          char *const func, const LogLevel lvl, const char
                          *const fmt, va_list args) {
 	/*
-	time	file	line	func	level	msg
+	Time (hh:mm:ss)	File name	Line number	Function name	Level name	Message content
+	15:36:23	myfile.c	42	main	WARNING	There is a bug!
 	*/
 	if(_outputattrs & CLOG_ATTR_TIME) {
 		char tstr[9];
@@ -300,18 +305,18 @@ static void _vlogmsg_json(const char *const file, const unsigned int line, const
                           char *const func, const LogLevel lvl, const char
                           *const fmt, va_list args) {
 	/*
-{
-	"log": [
-		{
-			"time": "15:36:23",
-			"file": "myfile.c",
-			"line": 42,
-			"func": "main",
-			"level": WARNING",
-			"msg": "There is a bug!"
-		}
-	]
-}
+	{
+		"log": [
+			{
+				"time": "15:36:23",
+				"file": "myfile.c",
+				"line": 42,
+				"func": "main",
+				"level": WARNING",
+				"msg": "There is a bug!"
+			}
+		]
+	}
 	*/
 	if(_json1stmsg) {
 		_json1stmsg = false;
