@@ -198,7 +198,15 @@ typedef enum {
 	/**
 	 * \brief Log messages in comma-separated values (table).
 	 */
-	CLOG_FORMAT_CSV
+	CLOG_FORMAT_CSV,
+
+	/**
+	 * \brief Log the messages in JSON format.
+	 *
+	 * \attention This format cannot be used in conjunction with the
+	 *            \a CLOG_INIT_APPEND init mode.
+	 */
+	 CLOG_FORMAT_JSON,
 } OutputFormat;
 
 

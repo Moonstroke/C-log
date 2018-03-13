@@ -49,13 +49,17 @@ static void _vlogmsg_xml(const char*, unsigned int, const char*, LogLevel, const
                          char*, va_list);
 static void _vlogmsg_csv(const char*, unsigned int, const char*, LogLevel, const
                          char*, va_list);
+static void _vlogmsg_json(const char*, unsigned int, const char*, LogLevel,
+                          const char*, va_list);
 static void (*_outputfuncs[])(const char*, unsigned int, const char*, LogLevel,
                               const char*, va_list) = {
 	[CLOG_FORMAT_TEXT] = _vlogmsg_text,
 	[CLOG_FORMAT_XML] = _vlogmsg_xml,
-	[CLOG_FORMAT_CSV] = _vlogmsg_csv
+	[CLOG_FORMAT_CSV] = _vlogmsg_csv,
+	[CLOG_FORMAT_JSON] = _vlogmsg_json,
 };
 
+static bool _json1stmsg; /* Necessary for the delimiter comma */
 
 #define DO_LOCK 1
 #define DO_UNLOCK 0
@@ -68,7 +72,7 @@ static void *_lockuserdata = NULL;
 
 static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
                          fmt, const OutputAttribute a) {
-	if(m == CLOG_INIT_APPEND && fmt == CLOG_FORMAT_XML)
+	if(m == CLOG_INIT_APPEND && (fmt == CLOG_FORMAT_XML || fmt == CLOG_FORMAT_JSON))
 		return false;
 	_logfile = f;
 	_initmode = m;
@@ -87,6 +91,11 @@ static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
 			if(a && CLOG_ATTR_FUNC)
 				fputs("Function name\t", _logfile);
 			fputs("Level name\tMessage content\n", _logfile);
+			break;
+		case CLOG_FORMAT_JSON:
+			/* TODO */
+			_json1stmsg = true;
+			fputs("{\n\t\"log\": [", _logfile);
 			break;
 		default: break;
 	}
@@ -126,8 +135,14 @@ bool clog_init(const OutputFormat fmt, const OutputAttribute a) {
 }
 
 void clog_term(void) {
-	if(_outputfmt == CLOG_FORMAT_XML) {
-		fputs("</log>\n", _logfile);
+	switch(_outputfmt) {
+		case CLOG_FORMAT_XML:
+			fputs("</log>\n", _logfile);
+			break;
+		case CLOG_FORMAT_JSON:
+			fputs("\n\t]\n}\n", _logfile);
+			break;
+		default: break;
 	}
 	fclose(_logfile);
 }
@@ -279,4 +294,44 @@ static void _vlogmsg_csv(const char *const file, const unsigned int line, const
 	/* The mesage itself */
 	vfprintf(_logfile, fmt, args);
 	fprintf(_logfile, "\n");
+}
+
+static void _vlogmsg_json(const char *const file, const unsigned int line, const
+                          char *const func, const LogLevel lvl, const char
+                          *const fmt, va_list args) {
+	/*
+{
+	"log": [
+		{
+			"time": "15:36:23",
+			"file": "myfile.c",
+			"line": 42,
+			"func": "main",
+			"level": WARNING",
+			"msg": "There is a bug!"
+		}
+	]
+}
+	*/
+	if(_json1stmsg) {
+		_json1stmsg = false;
+	} else
+		fputc(',', _logfile);
+	fputs("\n\t\t{\n", _logfile);
+	if(_outputattrs & CLOG_ATTR_TIME) {
+		char tstr[9];
+		_printtime(tstr);
+		fprintf(_logfile, "\t\t\t\"time\": \"%s\",\n", tstr);
+	}
+	if(_outputattrs & CLOG_ATTR_FILE)
+		fprintf(_logfile, "\t\t\t\"file\": \"%s\",\n\t\t\t\"line\": %u,\n",
+		        file, line);
+	if(_outputattrs & CLOG_ATTR_FUNC)
+		fprintf(_logfile, "\t\t\t\"func\": \"%s\",\n", func);
+	fprintf(_logfile, "\t\t\t\"level\": \"%s\",\n", _levelnames[lvl]);
+
+	/* The mesage itself */
+	fputs("\t\t\t\"msg: \"", _logfile);
+	vfprintf(_logfile, fmt, args);
+	fprintf(_logfile, "\"\n\t\t}");
 }
