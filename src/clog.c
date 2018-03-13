@@ -73,7 +73,10 @@ static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
 	_logfile = f;
 	_initmode = m;
 	if((_outputfmt = fmt) == CLOG_FORMAT_XML) {
-		/* TODO init XML markup */
+		fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n",
+		      _logfile);
+		fputs("<!DOCTYPE log SYSTEM \"clog.dtd\">", _logfile);
+		fputs("<log>\n", _logfile);
 	}
 	_outputattrs = a;
 	return true;
@@ -112,7 +115,7 @@ bool clog_init(const OutputFormat fmt, const OutputAttribute a) {
 
 void clog_term(void) {
 	if(_outputfmt == CLOG_FORMAT_XML) {
-		/* TODO close XML markup */
+		fputs("</log>\n", _logfile);
 	}
 	fclose(_logfile);
 }
@@ -234,10 +237,10 @@ static void _vlogmsg_xml(const char *const file, const unsigned int line, const
 		fprintf(_logfile, "time=\"%s\" ", tstr);
 	}
 	if(_outputattrs & CLOG_ATTR_FILE)
-		fprintf(_logfile, "file-name=\"%s\" file-line=\"%u\" ", file, line);
+		fprintf(_logfile, "file=\"%s\" line=\"%u\" ", file, line);
 	if(_outputattrs & CLOG_ATTR_FUNC)
-		fprintf(_logfile, "func-name=\"%s\" ", func);
-	fprintf(_logfile, "\"%s\">", _levelnames[lvl]);
+		fprintf(_logfile, "func=\"%s\" ", func);
+	fprintf(_logfile, "level=\"%s\">", _levelnames[lvl]);
 
 	/* The mesage itself */
 	vfprintf(_logfile, fmt, args);
