@@ -13,6 +13,16 @@ static const char *_modes[] = {
 	[CLOG_INIT_APPEND] = "a"
 };
 
+static void _init_text(void);
+static void _init_xml(void);
+static void _init_csv(void);
+static void _init_json(void);
+static void (*_initfuncs[])(void) = {
+	[CLOG_FORMAT_TEXT] = _init_text,
+	[CLOG_FORMAT_XML] = _init_xml,
+	[CLOG_FORMAT_CSV] = _init_csv,
+	[CLOG_FORMAT_JSON] = _init_json
+};
 static FILE *_logfile = NULL; /* cannot initialize to stderr :'( error is
                                 "initializer element is not constant" */
 
@@ -69,37 +79,34 @@ static void (*_lockfuncs[])(void*) = {
 };
 static void *_lockuserdata = NULL;
 
-
+static void _init_text(void) {}
+static void _init_xml(void) {
+	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n",
+		  _logfile);
+	fputs("<!DOCTYPE log SYSTEM \"clog.dtd\">", _logfile);
+	fputs("<log>\n", _logfile);
+}
+static void _init_csv(void) {
+	if(_outputattrs && CLOG_ATTR_TIME)
+		fputs("Time (hh:mm:ss)\t", _logfile);
+	if(_outputattrs && CLOG_ATTR_FILE)
+		fputs("File name\tLine number\t", _logfile);
+	if(_outputattrs && CLOG_ATTR_FUNC)
+		fputs("Function name\t", _logfile);
+	fputs("Level name\tMessage content\n", _logfile);
+}
+static void _init_json(void) {
+	_json1stmsg = true;
+	fputs("{\n\t\"log\": [", _logfile);
+}
 static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
                          fmt, const OutputAttribute a) {
 	if(m == CLOG_INIT_APPEND && (fmt == CLOG_FORMAT_XML || fmt == CLOG_FORMAT_JSON))
 		return false;
 	_logfile = f;
 	_initmode = m;
-	switch(_outputfmt = fmt) {
-		case CLOG_FORMAT_XML:
-			fputs("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n",
-				  _logfile);
-			fputs("<!DOCTYPE log SYSTEM \"clog.dtd\">", _logfile);
-			fputs("<log>\n", _logfile);
-			break;
-		case CLOG_FORMAT_CSV:
-			if(a && CLOG_ATTR_TIME)
-				fputs("Time (hh:mm:ss)\t", _logfile);
-			if(a && CLOG_ATTR_FILE)
-				fputs("File name\tLine number\t", _logfile);
-			if(a && CLOG_ATTR_FUNC)
-				fputs("Function name\t", _logfile);
-			fputs("Level name\tMessage content\n", _logfile);
-			break;
-		case CLOG_FORMAT_JSON:
-			/* TODO */
-			_json1stmsg = true;
-			fputs("{\n\t\"log\": [", _logfile);
-			break;
-		default: break;
-	}
 	_outputattrs = a;
+	_initfuncs[_outputfmt = fmt]();
 	return true;
 }
 
