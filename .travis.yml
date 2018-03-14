@@ -6,8 +6,8 @@ sudo: true
 
 
 before_script:
- - make
- - sudo make install
+  - make
+  - sudo make install
 
 script:
- - make test
+  - make test
