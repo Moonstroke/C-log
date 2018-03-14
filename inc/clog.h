@@ -83,18 +83,6 @@
  */
 
 /**
- * \brief Initialization modes for the log file.
- */
-typedef enum {
-
-	/** \brief Opens the file and reset its content. */
-	CLOG_INIT_TRUNCATE,
-
-	/** \brief Appends the content at the end of the file. */
-	CLOG_INIT_APPEND
-} InitMode;
-
-/**
  * \brief Defines the level of priority of a logging message, or an alias for a
  * log filter.
  *
@@ -220,13 +208,12 @@ typedef enum {
  * \brief Initializes the log system to a file.
  *
  * \param[in] filename The path to the log file
- * \param[in] mode     The opening mode of the file
  * \param[in] format   The output format
  * \param[in] attrs The OutputAttribute, or several \c OR -ed together
  *
  * \return \c true iff no error occured.
  */
-bool clog_init_file(const char *filename, InitMode mode, OutputFormat format,
+bool clog_init_file(const char *filename, OutputFormat format,
                     OutputAttribute attrs);
 
 /**

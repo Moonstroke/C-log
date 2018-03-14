@@ -7,12 +7,6 @@
 #define INLINE __attribute__((__always_inline__)) inline
 
 
-static InitMode _initmode = CLOG_INIT_TRUNCATE;
-static const char *_modes[] = {
-	[CLOG_INIT_TRUNCATE] = "w",
-	[CLOG_INIT_APPEND] = "a"
-};
-
 static void _init_text(void);
 static void _init_xml(void);
 static void _init_csv(void);
@@ -99,12 +93,9 @@ static void _init_json(void) {
 	_json1stmsg = true;
 	fputs("{\n\t\"log\": [", _logfile);
 }
-static INLINE bool _init(FILE *const f, const InitMode m, const OutputFormat
-                         fmt, const OutputAttribute a) {
-	if(m == CLOG_INIT_APPEND && (fmt == CLOG_FORMAT_XML || fmt == CLOG_FORMAT_JSON))
-		return false;
+static INLINE bool _init(FILE *const f, const OutputFormat fmt,
+                         const OutputAttribute a) {
 	_logfile = f;
-	_initmode = m;
 	_outputattrs = a;
 	_initfuncs[_outputfmt = fmt]();
 	return true;
@@ -131,14 +122,14 @@ static INLINE void _lock(int i) {
 }
 
 
-bool clog_init_file(const char *const s, const InitMode m, const OutputFormat
-                    fmt, const OutputAttribute a) {
-	FILE *const f = fopen(s, _modes[m]);
-	return (f != NULL) && _init(f, m, fmt, a);
+bool clog_init_file(const char *const s, const OutputFormat fmt,
+                    const OutputAttribute a) {
+	FILE *const f = fopen(s, "w");
+	return (f != NULL) && _init(f, fmt, a);
 }
 
 bool clog_init(const OutputFormat fmt, const OutputAttribute a) {
-	return _init(stderr, CLOG_INIT_TRUNCATE, fmt, a);
+	return _init(stderr, fmt, a);
 }
 
 void clog_term(void) {
