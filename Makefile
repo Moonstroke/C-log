@@ -2,7 +2,7 @@
 
 
 # Project name
-PROJECT_NAME := log
+PROJECT_NAME := clog
 
 
 # Project directories
