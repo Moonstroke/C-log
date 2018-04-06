@@ -10,9 +10,9 @@ https://travis-ci.org/Moonstroke/Clog)
 in and for C.
 
 The project is designed to be lightweight, efficient and easy to use.
-The features are fully documented here and in the `log.h` file (in the `inc`
+The features are fully documented here and in the `clog.h` file (in the `inc`
 directory) in [Doxygen](doxygen.org) format; in fact, the only files you really
-need are `log.h`, and `log.c`, in the `src` directory!
+need are `clog.h`, and `clog.c`, in the `src` directory!
 
 In the same vein as [Log4j](https://logging.apache.org/log4j/2.x/),
 [Syslog](https://en.wikipedia.org/wiki/Syslog), etc., the system hierarchizes
