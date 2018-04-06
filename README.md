@@ -1,12 +1,12 @@
 # Clog
 
-[![Build Status](https://travis-ci.org/Moonstroke/C-log.svg?branch=master)](
-https://travis-ci.org/Moonstroke/C-log)
+[![Build Status](https://travis-ci.org/Moonstroke/Clog.svg?branch=master)](
+https://travis-ci.org/Moonstroke/Clog)
 
 
 ## A simple logging system in C
 
-*Clog* is , beyond traditional dutch footwear, a simple logging system written
+*Clog* is, beyond traditional dutch footwear, a simple logging system written
 in and for C.
 
 The project is designed to be lightweight, efficient and easy to use.
