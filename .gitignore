@@ -3,7 +3,7 @@ a.out
 test_*
 
 # Object files
-*.o
+obj/
 lib*.a
 
 # Documentation directory
