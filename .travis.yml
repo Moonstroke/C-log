@@ -1,8 +1,17 @@
+# Generate two builds with both GCC and Clang
 language: c
 compiler:
   - gcc
   - clang
 
+
+# Activate builds only for master
+branches:
+  only:
+    - master
+
+
+# Build the project and launch the tests
 script:
   - make
   - make test
