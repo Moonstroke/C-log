@@ -438,7 +438,8 @@ void logmsg(const char *file, unsigned int line, const char *func,
  * \sa logmsg
  */
 void vlogmsg(const char *file, unsigned int line, const char *func,
-             LogLevel level, const char *fmt, va_list args) PRINTF(5, 0);
+             LogLevel level, const char *fmt, va_list args)
+PRINTF(5, 0) NOTNULL(1, 3, 5);
 
 
 /** \} */
