@@ -26,6 +26,7 @@ static OutputAttribute _outputattrs = CLOG_ATTR_MINIMAL;
 
 static LogLevel _filterlevel = CLOG_FILTER_ALL;
 static const char *const _levelnames[] = {
+		[CLOG_TRACE] = "TRACE",
 		[CLOG_DEBUG] = "DEBUG",
 		[CLOG_VERBOSE] = "VERBOSE",
 		[CLOG_INFO] = "INFO",
@@ -36,6 +37,7 @@ static const char *const _levelnames[] = {
 };
 
 static const char *const _colorcodes[] = {
+	[CLOG_TRACE] = "90", /* grey ("bright black") */
 	[CLOG_DEBUG] = "34", /* blue */
 	[CLOG_VERBOSE] = "36", /* cyan */
 	[CLOG_INFO] = "32", /* green */

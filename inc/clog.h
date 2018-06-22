@@ -93,6 +93,8 @@
  * \verbatim INFO -- info message content \endverbatim
  */
 typedef enum {
+	/** \brief Designed to be used as a marker for the control flow. */
+	CLOG_TRACE,
 	/** \brief A message used while developing, to help the programmer. */
 	CLOG_DEBUG,
 
