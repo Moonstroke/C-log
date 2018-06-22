@@ -358,6 +358,15 @@ void logmsg(const char *file, unsigned int line, const char *func,
             LogLevel level, const char *fmt, ...) PRINTF(5, 6) NOTNULL(1, 3, 5);
 
 /**
+ * \brief Logs a trace message.
+ *
+ * \param[in] ... The format string and optional arguments
+ *
+ * \sa logmsg
+ */
+#define trace(...) logmsg(__FILE__, __LINE__, __func__, CLOG_TRACE, __VA_ARGS__)
+
+/**
  * \brief Logs a debugging message.
  *
  * \param[in] ... The format string and the optional arguments
