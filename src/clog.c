@@ -51,10 +51,10 @@ static const char *const _colorcodes[] = {
 
 static void _vlogmsg_text(const char*, unsigned int, const char*, LogLevel,
                           const char*, va_list);
-static void _vlogmsg_xml(const char*, unsigned int, const char*, LogLevel, const
-                         char*, va_list);
-static void _vlogmsg_csv(const char*, unsigned int, const char*, LogLevel, const
-                         char*, va_list);
+static void _vlogmsg_xml(const char*, unsigned int, const char*, LogLevel,
+                         const char*, va_list);
+static void _vlogmsg_csv(const char*, unsigned int, const char*, LogLevel,
+                         const char*, va_list);
 static void _vlogmsg_json(const char*, unsigned int, const char*, LogLevel,
                           const char*, va_list);
 static void (*_outputfuncs[])(const char*, unsigned int, const char*, LogLevel,
@@ -184,16 +184,18 @@ void *clog_getlockuserdata(void) {
 	return _lockuserdata;
 }
 
-void logmsg(const char *const file, const unsigned int line, const char *const func,
-            const LogLevel level, const char *const fmt, ...) {
+void logmsg(const char *const file, const unsigned int line,
+            const char *const func, const LogLevel level, const char *const fmt,
+            ...) {
 	va_list args;
 	va_start(args, fmt);
 	vlogmsg(file, line, func, level, fmt, args);
 	va_end(args);
 }
 
-void vlogmsg(const char *const file, const unsigned int line, const char *const func,
-             const LogLevel lvl, const char *fmt, va_list args) {
+void vlogmsg(const char *const file, const unsigned int line,
+             const char *const func, const LogLevel lvl, const char *fmt,
+             va_list args) {
 	/* acquire thread lock */
 	_lock(DO_LOCK);
 
@@ -221,9 +223,9 @@ void vlogmsg(const char *const file, const unsigned int line, const char *const 
 }
 
 
-static void _vlogmsg_text(const char *const file, const unsigned int line, const
-                          char *const func, const LogLevel lvl, const char
-                          *const fmt, va_list args) {
+static void _vlogmsg_text(const char *const file, const unsigned int line,
+                          const char *const func, const LogLevel lvl,
+                          const char *const fmt, va_list args) {
 	/*
 	[15:36:23] myfile.c:42, main() WARNING -- There is a bug!
 	*/
@@ -251,9 +253,9 @@ static void _vlogmsg_text(const char *const file, const unsigned int line, const
 	fprintf(_logfile, "\n");
 }
 
-static void _vlogmsg_xml(const char *const file, const unsigned int line, const
-                         char *const func, const LogLevel lvl, const char
-                         *const fmt, va_list args) {
+static void _vlogmsg_xml(const char *const file, const unsigned int line,
+                         const char *const func, const LogLevel lvl,
+                         const char *const fmt, va_list args) {
 	/*
 	<log>
 		<message time="15:36:23" file="myfile.c" line="42" func="main" level="WARNING">
@@ -278,9 +280,9 @@ static void _vlogmsg_xml(const char *const file, const unsigned int line, const
 	fprintf(_logfile, "</message>\n");
 }
 
-static void _vlogmsg_csv(const char *const file, const unsigned int line, const
-                         char *const func, const LogLevel lvl, const char
-                         *const fmt, va_list args) {
+static void _vlogmsg_csv(const char *const file, const unsigned int line,
+                         const char *const func, const LogLevel lvl,
+                         const char *const fmt, va_list args) {
 	/*
 	Time (hh:mm:ss)	File name	Line number	Function name	Level name	Message content
 	15:36:23	myfile.c	42	main	WARNING	There is a bug!
@@ -301,9 +303,9 @@ static void _vlogmsg_csv(const char *const file, const unsigned int line, const
 	fprintf(_logfile, "\n");
 }
 
-static void _vlogmsg_json(const char *const file, const unsigned int line, const
-                          char *const func, const LogLevel lvl, const char
-                          *const fmt, va_list args) {
+static void _vlogmsg_json(const char *const file, const unsigned int line,
+                          const char *const func, const LogLevel lvl,
+                          const char *const fmt, va_list args) {
 	/*
 	{
 		"log": [

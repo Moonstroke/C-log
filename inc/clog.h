@@ -382,7 +382,8 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define verbose(...) logmsg(__FILE__, __LINE__, __func__, CLOG_VERBOSE, __VA_ARGS__)
+#define verbose(...) logmsg(__FILE__, __LINE__, __func__, CLOG_VERBOSE,\
+                            __VA_ARGS__)
 
 /**
  * \brief Logs a basic information message.
@@ -400,7 +401,8 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define notice(...) logmsg(__FILE__, __LINE__, __func__, CLOG_NOTICE, __VA_ARGS__)
+#define notice(...) logmsg(__FILE__, __LINE__, __func__, CLOG_NOTICE,\
+                           __VA_ARGS__)
 
 /**
  * \brief Logs a warning message.
@@ -409,7 +411,8 @@ void logmsg(const char *file, unsigned int line, const char *func,
  *
  * \sa logmsg
  */
-#define warning(...) logmsg(__FILE__, __LINE__, __func__, CLOG_WARNING, __VA_ARGS__)
+#define warning(...) logmsg(__FILE__, __LINE__, __func__, CLOG_WARNING,\
+                            __VA_ARGS__)
 
 /**
  * \brief Logs an error message.
