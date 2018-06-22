@@ -16,10 +16,10 @@ need are `clog.h`, and `clog.c`, in the `src` directory!
 
 In the same vein as [Log4j](https://logging.apache.org/log4j/2.x/),
 [Syslog](https://en.wikipedia.org/wiki/Syslog), etc., the system hierarchizes
-the logs in priority levels, here at the number of seven: three in an *error*
-category, three in an *info* category, and a debugging level.
-These levels, and the associated functions, allow to order and filter the output
-easily.
+the logs in priority levels, here at the number of eight: three in an *error*
+category, three in an *info* category, and two debugging levels (*debug* and
+*trace*). These levels, and the associated functions, allow to order and filter
+the output easily.
 
 A number of output attributes allow to specify context information for the
 message (file name, line number, function name) or to enhance the output
@@ -33,6 +33,7 @@ environment (where the log destination could be accessed concurrently).
 
 |Priority level|  Color |Priority description
 |:------------:|:------:|:-------------------
+|    `TRACE`   |  Grey  |Control flow indicator.
 |    `DEBUG`   |  Blue  |Development info for the programmer.
 |   `VERBOSE`  |  Cyan  |Details, extraneous information.
 |    `INFO`    |  Green |Common information.
