@@ -29,7 +29,7 @@ A couple of functions allow to specify user-defined functions to acquire and
 release a thread lock; the system is thus safe to use in a multithreaded
 environment (where the log destination could be accessed concurrently).
 
-**Sumary table**
+**Summary table**
 
 |Priority level|  Color |Priority description
 |:------------:|:------:|:-------------------
