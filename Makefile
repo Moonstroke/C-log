@@ -71,10 +71,10 @@ LDFLAGS := -L.
 ## RULES ##
 
 # All rule names that do not refer to a file
-.PHONY: all clean distclean doc test testclean install uninstall
+.PHONY: all clean distclean doc test testclean install uninstall installdeps
 
 # The default rule to execute
-all: testclean $(AR_LIB)
+all: installdeps testclean $(AR_LIB)
 
 # Linkage
 $(AR_LIB): $(OBJ)
@@ -120,3 +120,6 @@ install:
 uninstall:
 	@rm -f $(patsubst $(INC_DIR)/%,$(INST_DIR)/include/%,$(wildcard $(INC_DIR)/*))
 	@rm -f $(INST_DIR)/lib/$(AR_LIB)
+
+installdeps:
+	make -C PUCA install
