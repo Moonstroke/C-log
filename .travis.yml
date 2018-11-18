@@ -14,6 +14,10 @@ branches:
     - master
 
 
+# Build the dependencies
+before_script:
+  - sudo make installdeps
+
 # Build the project and launch the tests
 script:
   - make
