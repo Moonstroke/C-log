@@ -14,7 +14,7 @@ branches:
     - master
 
 
-# Build the dependencies
+# Build and install the dependencies
 before_script:
   - sudo make installdeps
 
