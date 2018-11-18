@@ -2,9 +2,8 @@
 
 #include <time.h> /* for time_t, localtime, strftime */
 
+#include <PUCA/funcattrs.h> /* for INLINE, PURE, NOTNULL */
 
-
-#define INLINE __attribute__((__always_inline__)) inline
 
 
 static void _init_text(void);
@@ -342,3 +341,6 @@ static void _vlogmsg_json(const char *const file, const unsigned int line,
 	vfprintf(_logfile, fmt, args);
 	fprintf(_logfile, "\"\n\t\t}");
 }
+
+
+//#include <PUCA/end.h>

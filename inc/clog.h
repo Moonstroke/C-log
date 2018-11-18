@@ -34,6 +34,8 @@
 #ifndef CLOG_H
 #define CLOG_H
 
+#define HAVE_IOATTRS /* to enable PRINTF */
+#include <PUCA/funcattrs.h> /* for NOTNULL, PURE, PRINTF */
 #include <stdarg.h> /* for va_* */
 #include <stdbool.h>
 #include <stdio.h> /* for FILE, fopen, fprintf, fputs */
@@ -41,43 +43,6 @@
 
 
 /**
- * \name GNU C function attributes
- * \{
- */
-
-#ifndef __GNUC__
-/**
- * \brief Empty definition for ISO C.
- *
- * If the project is compiled following the ISO C standard, this GCC syntax
- * feature is defined empty to not hinder functions declarations; in that case
- * it only serves as a hint for the reader.
- */
-# define __attribute__(x)
-#endif
-
-/**
- * \brief The arguments at given indices (starting from \c 1) must not be
- *        \c NULL pointers.
- *
- * \param[in] ... The arguments to check for non-\c NULL value.
- */
-#define NOTNULL(...) __attribute__((__nonnull__(__VA_ARGS__)))
-
-/** \brief The function does not affect global data. */
-#define PURE __attribute__((__pure__, __warn_unused_result__))
-
-/**
- * \brief The function uses a \a printf -like formatting style.
- *
- * \param[in] fmt  The index of the format string arguments
- * \param[in] arg1 The index of the first format argument
- */
-#define PRINTF(fmt, arg1) __attribute__((__format__(printf, fmt, arg1)))
-
-
-/**
- * \}
  * \name Enumerations
  * \{
  */
@@ -457,5 +422,9 @@ PRINTF(5, 0) NOTNULL(1, 3, 5);
 
 
 /** \} */
+
+
+#include <PUCA/end.h>
+
 
 #endif /* CLOG_H */
