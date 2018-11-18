@@ -4,6 +4,9 @@ compiler:
   - gcc
   - clang
 
+#Use a sudo-enabled environment
+sudo: true
+
 
 # Activate builds only for master
 branches:
