@@ -20,6 +20,9 @@ DOC_DIR := doc
 # Installation directory
 INST_DIR := /usr/local
 
+# Variables to use in dependencies
+export INST_DIR
+
 
 
 ## BUILD SETTINGS ##
