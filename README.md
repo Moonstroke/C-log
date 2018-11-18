@@ -6,7 +6,7 @@ https://travis-ci.org/Moonstroke/Clog)
 
 ## A simple logging system in C
 
-*Clog* is, beyond traditional dutch footwear, a simple logging system written
+*Clog* is --beyond traditional dutch footwear-- a simple logging system written
 in and for C.
 
 The project is designed to be lightweight, efficient and easy to use.
@@ -22,12 +22,12 @@ category, three in an *info* category, and two debugging levels (*debug* and
 the output easily.
 
 A number of output attributes allow to specify context information for the
-message (file name, line number, function name) or to enhance the output
+message --file name, line number, function name-- or to enhance the output
 (colors!).
 
 A couple of functions allow to specify user-defined functions to acquire and
 release a thread lock; the system is thus safe to use in a multithreaded
-environment (where the log destination could be accessed concurrently).
+environment where the log file could be accessed concurrently.
 
 **Summary table**
 
@@ -120,10 +120,10 @@ where `<name>` describes the effect ot the attribute:
   `FUNC` |Contains the name of the function the call was made from
 `COLORED`|The header is colored with the color associated with the level (*cf.* Summary table)
 
-**Warning:** Clog uses
-[ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code) to color the
-output. This feature involves unprintable characters; although widely supported
-in terminal emulators, they may be misrepresented in text editors.
+**Warning:** Clog uses [ANSI escape
+codes](https://en.wikipedia.org/wiki/ANSI_escape_code) to color the output. This
+feature involves unprintable characters; although widely supported in terminal
+emulators, they may be misrepresented in text editors.
 
 Several attributes can be given simultaneously, by combining them with a bitwise
 `OR`. In fact, *OutputAttribute* defines a value, `CLOG_ATTR_VERBOSE`, which
